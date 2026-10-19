@@ -15,7 +15,7 @@ export const appointmentSchema = z.object({
   email: z.string().email("Please enter a valid email address (e.g., patient@example.com)"),
   city: z.string().min(1, "Please select or confirm your city"),
   consultationType: z.enum(["in-clinic", "online"], {
-    required_error: "Please choose whether you prefer an in-clinic or online consultation",
+    message: "Please choose whether you prefer an in-clinic or online consultation",
   }),
   date: z.string().min(1, "Please select a consultation date"),
   timeSlot: z.string().min(1, "Please select an available appointment time slot"),

@@ -43,7 +43,7 @@ export default function PrivacyPage() {
 
           <h2 className="text-xl font-bold text-maroon pt-2">2. Local Storage Usage</h2>
           <p>
-            This website uses your browser's standard <code>localStorage</code> solely to remember your chosen interface language (English, हिन्दी, ಕನ್ನಡ, தமிழ்). This preference remains locally on your device and can be cleared at any time through your browser settings.
+            This website uses your browser&apos;s standard <code>localStorage</code> solely to remember your chosen interface language (English, हिन्दी, ಕನ್ನಡ, தமிழ்). This preference remains locally on your device and can be cleared at any time through your browser settings.
           </p>
 
           <h2 className="text-xl font-bold text-maroon pt-2">3. Fictional Entities & Personas</h2>

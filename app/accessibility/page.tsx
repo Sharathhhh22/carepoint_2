@@ -51,10 +51,10 @@ export default function AccessibilityPage() {
               <strong>Visible Focus Indicators:</strong> Universal high-contrast saffron focus rings (2px solid outline with 2px offset) are active across all focusable elements.
             </li>
             <li>
-              <strong>Reduced Motion:</strong> Animations and reveals automatically respect the user's operating system <code>prefers-reduced-motion</code> preference.
+              <strong>Reduced Motion:</strong> Animations and reveals automatically respect the user&apos;s operating system <code>prefers-reduced-motion</code> preference.
             </li>
             <li>
-              <strong>Screen Reader Support:</strong> Dynamic filter updates announce result counts using <code>aria-live="polite"</code>. Form inputs feature explicit visible labels and descriptive error associations via <code>aria-describedby</code>.
+              <strong>Screen Reader Support:</strong> Dynamic filter updates announce result counts using <code>aria-live=&quot;polite&quot;</code>. Form inputs feature explicit visible labels and descriptive error associations via <code>aria-describedby</code>.
             </li>
           </ul>
 

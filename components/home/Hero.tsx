@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck, Stethoscope, Sparkles, Building2, PhoneCall } from "lucide-react";
+import { ShieldCheck, Stethoscope, Building2, PhoneCall } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SmartSearch } from "./SmartSearch";
 import { Badge } from "@/components/ui/Badge";

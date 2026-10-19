@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card, CardContent } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { IconBadge } from "@/components/ui/IconBadge";
 import { specialitiesData, Speciality } from "@/lib/data/specialities";
 import { useLanguage } from "@/lib/i18n/LanguageContext";

@@ -24,7 +24,7 @@ export function Footer() {
     resolver: zodResolver(newsletterSchema),
   });
 
-  const onSubmit = (_data: NewsletterFormData) => {
+  const onSubmit = () => {
     showToast(
       "Subscribed to CarePoint health bulletins (Demo). No real emails will be sent.",
       "success"
