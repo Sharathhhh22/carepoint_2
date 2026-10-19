@@ -1,4 +1,4 @@
-export type SupportedLocale = "en" | "hi" | "kn" | "ta";
+export type SupportedLocale = "en" | "hi" | "kn" | "ta" | "te";
 
 export interface LocaleDefinition {
   code: SupportedLocale;
@@ -11,6 +11,7 @@ export const supportedLocales: LocaleDefinition[] = [
   { code: "hi", label: "Hindi", nativeName: "हिन्दी" },
   { code: "kn", label: "Kannada", nativeName: "ಕನ್ನಡ" },
   { code: "ta", label: "Tamil", nativeName: "தமிழ்" },
+  { code: "te", label: "Telugu", nativeName: "తెలుగు" },
 ];
 
 export interface DictionaryStrings {
@@ -32,6 +33,7 @@ export interface DictionaryStrings {
     clearSearch: string;
     noMatches: string;
     noMatchesHint: string;
+    useLocation: string;
   };
   sections: {
     specialitiesEyebrow: string;
@@ -73,6 +75,12 @@ export interface DictionaryStrings {
     hiddenFacilitiesNotice: string;
     emergencyCallout: string;
     demoDisclaimer: string;
+    machineTranslationDemo: string;
+    sortBy: string;
+    sortFeeAsc: string;
+    sortFeeDesc: string;
+    sortNearest: string;
+    sortDefault: string;
   };
 }
 
@@ -96,6 +104,7 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       clearSearch: "Clear search",
       noMatches: "No matches. Try another speciality or locality.",
       noMatchesHint: "Reset your search query or location to explore all clinics and doctors.",
+      useLocation: "Use my location",
     },
     sections: {
       specialitiesEyebrow: "Specialized Clinical Disciplines",
@@ -132,11 +141,17 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       budgetFilterTitle: "Budget (Consultation Fee)",
       budgetAny: "Any budget",
       budgetUnder500: "Under ₹500",
-      budget500To1000: "₹500 to ₹1,000",
+      budget500To1000: "₹500 to ₹1,00,000",
       budgetAbove1000: "Above ₹1,000",
       hiddenFacilitiesNotice: "facility with no listed fee is hidden",
       emergencyCallout: "For emergencies, call 112 immediately or go to the nearest emergency department.",
       demoDisclaimer: "Demonstration website. All clinicians, patients, and content are fictional.",
+      machineTranslationDemo: "Machine-assisted translation (demo)",
+      sortBy: "Sort by",
+      sortDefault: "Recommended",
+      sortFeeAsc: "Fee: low to high",
+      sortFeeDesc: "Fee: high to low",
+      sortNearest: "Nearest first",
     },
   },
   hi: {
@@ -158,6 +173,7 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       clearSearch: "खोज साफ़ करें",
       noMatches: "कोई परिणाम नहीं मिला। कृपया अन्य विशेषता या क्षेत्र आज़माएं।",
       noMatchesHint: "सभी क्लीनिक और डॉक्टर देखने के लिए अपनी खोज को रीसेट करें।",
+      useLocation: "मेरी लोकेशन का उपयोग करें",
     },
     sections: {
       specialitiesEyebrow: "विशेषज्ञ चिकित्सा विभाग",
@@ -199,6 +215,12 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       hiddenFacilitiesNotice: "असूचीबद्ध शुल्क वाले केंद्र छिपाए गए हैं",
       emergencyCallout: "आपात स्थिति के लिए तुरंत 112 पर कॉल करें या नजदीकी आपातकालीन विभाग में जाएं।",
       demoDisclaimer: "प्रदर्शन वेबसाइट। सभी चिकित्सक, रोगी और सामग्री काल्पनिक हैं।",
+      machineTranslationDemo: "मशीनी अनुवाद (डेमो)",
+      sortBy: "क्रमबद्ध करें",
+      sortDefault: "अनुशंसित",
+      sortFeeAsc: "शुल्क: कम से अधिक",
+      sortFeeDesc: "शुल्क: अधिक से कम",
+      sortNearest: "समीपस्थ पहले",
     },
   },
   kn: {
@@ -220,6 +242,7 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       clearSearch: "ಹುಡುಕಾಟ ತೆರವುಗೊಳಿಸಿ",
       noMatches: "ಯಾವುದೇ ಫಲಿತಾಂಶಗಳಿಲ್ಲ. ಬೇರೆ ತಜ್ಞತೆ ಅಥವಾ ಬಡಾವಣೆ ಪ್ರಯತ್ನಿಸಿ.",
       noMatchesHint: "ಎಲ್ಲಾ ಆಸ್ಪತ್ರೆಗಳನ್ನು ನೋಡಲು ನಿಮ್ಮ ಹುಡುಕಾಟವನ್ನು ಮರುಹೊಂದಿಸಿ.",
+      useLocation: "ನನ್ನ ಸ್ಥಳ ಬಳಸಿ",
     },
     sections: {
       specialitiesEyebrow: "ವೈದ್ಯಕೀಯ ವಿಶೇಷತೆಗಳು",
@@ -261,6 +284,12 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       hiddenFacilitiesNotice: "ಶುಲ್ಕ ನಮೂದಿಸದ ಕೇಂದ್ರಗಳನ್ನು ಮರೆಮಾಡಲಾಗಿದೆ",
       emergencyCallout: "ತುರ್ತು ಪರಿಸ್ಥಿತಿಗಾಗಿ ತಕ್ಷಣವೇ 112 ಗೆ ಕರೆ ಮಾಡಿ ಅಥವಾ ಸಮೀಪದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ.",
       demoDisclaimer: "ಪ್ರಾತ್ಯಕ್ಷಿಕೆ ವೆಬ್‌ಸೈಟ್. ಎಲ್ಲಾ ವೈದ್ಯರು, ರೋಗಿಗಳು ಮತ್ತು ವಿಷಯಗಳು ಕಾಲ್ಪನಿಕವಾಗಿವೆ.",
+      machineTranslationDemo: "ಯಂತ್ರ ಸಹಾಯಿತ ಅನುವಾದ (ಡೆಮೊ)",
+      sortBy: "ವಿಂಗಡಣೆ",
+      sortDefault: "ಶಿಫಾರಸು ಮಾಡಿದ",
+      sortFeeAsc: "ಶುಲ್ಕ: ಕಡಿಮೆಯಿಂದ ಹೆಚ್ಚು",
+      sortFeeDesc: "ಶುಲ್ಕ: ಹೆಚ್ಚಿನಿಂದ ಕಡಿಮೆ",
+      sortNearest: "ಹತ್ತಿರದ ಮೊದಲನೆಯದು",
     },
   },
   ta: {
@@ -282,6 +311,7 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       clearSearch: "தேடலை அழிக்கவும்",
       noMatches: "பொருத்தமான முடிவுகள் இல்லை. வேறு துறை அல்லது பகுதியை முயற்சிக்கவும்.",
       noMatchesHint: "அனைத்து மருத்துவமனைகளையும் காண உங்கள் தேடலை மீட்டமைக்கவும்.",
+      useLocation: "எனது இருப்பிடத்தைப் பயன்படுத்து",
     },
     sections: {
       specialitiesEyebrow: "சிறப்பு மருத்துவத் துறைகள்",
@@ -323,13 +353,97 @@ export const dictionaries: Record<SupportedLocale, DictionaryStrings> = {
       hiddenFacilitiesNotice: "கட்டணம் குறிப்பிடப்படாத மையங்கள் மறைக்கப்பட்டுள்ளன",
       emergencyCallout: "அவசர சிகிச்சைக்கு உடனடியாக 112 ஐ அழைக்கவும் அல்லது அருகிலுள்ள அவசர சிகிச்சைப் பிரிவுக்குச் செல்லவும்.",
       demoDisclaimer: "செயல்விளக்க வலைத்தளம். அனைத்து மருத்துவர்கள், நோயாளிகள் மற்றும் தகவல்களும் கற்பனையானவை.",
+      machineTranslationDemo: "இயந்திர உதவி மொழிபெயர்ப்பு (டெமோ)",
+      sortBy: "வரிசைப்படுத்து",
+      sortDefault: "பரிந்துரைக்கப்பட்டவை",
+      sortFeeAsc: "கட்டணம்: குறைவு முதல் அதிகம்",
+      sortFeeDesc: "கட்டணம்: அதிகம் முதல் குறைவு",
+      sortNearest: "அருகிலுள்ளவை முதலில்",
+    },
+  },
+  te: {
+    nav: {
+      findDoctors: "వైద్యులను కనుగొనండి",
+      clinics: "క్లినిక్‌లు & ఆసుపత్రులు",
+      labTests: "ల్యాబ్ పరీక్షలు",
+      services: "ఆరోగ్య సేవలు",
+      loginDemo: "సైన్ ఇన్ (డెమో)",
+      skipLink: "ప్రధాన కంటెంట్‌కు వెళ్లండి",
+    },
+    hero: {
+      headline: "ఆరోగ్య సంరక్షణ, మీ ఇంటికి సమీపంలో.",
+      subtext: "వైద్యుడు, స్పెషాలిటీ, క్లినిక్, ఆసుపత్రి లేదా ప్రాంతం ఆధారంగా శోధించండి.",
+      searchPlaceholder: "వైద్యుడు, స్పెషాలిటీ, క్లినిక్, ఆసుపత్రి లేదా ప్రాంతం",
+      selectCity: "నగరాన్ని ఎంచుకోండి",
+      selectLocality: "ప్రాంతాన్ని ఎంచుకోండి",
+      findCareBtn: "సంరక్షణను కనుగొనండి",
+      clearSearch: "శోధనను క్లియర్ చేయండి",
+      noMatches: "సరిపోలే ఫలితాలు లేవు. దయచేసి మరొక స్పెషాలిటీ లేదా ప్రాంతాన్ని ప్రయత్నించండి.",
+      noMatchesHint: "అన్ని ఆసుపత్రులు మరియు వైద్యులను చూడటానికి మీ శోధనను రీసెట్ చేయండి.",
+      useLocation: "నా స్థానాన్ని ఉపయోగించండి",
+    },
+    sections: {
+      specialitiesEyebrow: "ప్రత్యేక వైద్య విభాగాలు",
+      specialitiesTitle: "వైద్య స్పెషాలిటీ ప్రకారం సంప్రదించండి",
+      specialitiesIntro: "పారదర్శక నమూనా రుసుములతో విశ్వసనీయ వైద్యులను అన్వేషించండి.",
+      clinicsEyebrow: "స్థానిక ఆరోగ్య కేంద్రాలు",
+      clinicsTitle: "మీ సమీపంలోని క్లినిక్‌లు మరియు ఆసుపత్రులు",
+      clinicsIntro: "మీ ప్రాంతంలో ధృవీకరించబడిన కమ్యూనిటీ క్లినిక్‌లు మరియు ఆసుపత్రులు.",
+      doctorsEyebrow: "అనుభవజ్ఞులైన వైద్యులు",
+      doctorsTitle: "మీ వైద్యుడిని కనుగొనండి",
+      doctorsIntro: "స్పష్టమైన భాషా నైపుణ్యాలు, ₹ రుసుము మరియు నమూనా లభ్యతతో వైద్యులను చూడండి.",
+      servicesEyebrow: "ఆరోగ్య సేవలు",
+      servicesTitle: "పారదర్శక ఆరోగ్య సేవలు",
+      servicesIntro: "ధరల షెడ్యూల్, ఇంటి వద్ద డయాగ్నస్టిక్ పరీక్షలు మరియు ప్రభుత్వ పథకాల సమాచారం.",
+      familyEyebrow: "కుటుంబ శ్రేయస్సు",
+      familyTitle: "కుటుంబ ఆరోగ్య మార్గదర్శకత్వం",
+      familyIntro: "మీ కోసం, తల్లిదండ్రులు, పిల్లలు మరియు జీవిత భాగస్వామి కోసం ముందస్తు ఆరోగ్య సలహాలు.",
+      faqEyebrow: "సాధారణ ప్రశ్నలు",
+      faqTitle: "తరచుగా అడిగే ప్రశ్నలు",
+      faqIntro: "రుసుములు, క్యాష్‌లెస్ బీమా (డెమో) మరియు అత్యవసర చికిత్స సమాచారం.",
+    },
+    common: {
+      bookDemo: "బుక్ చేయండి (డెమో)",
+      viewProfile: "ప్రొఫైల్ చూడండి",
+      sampleVerification: "నమూనా ధృవీకరణ",
+      sampleData: "నమూనా డేటా",
+      directions: "దిశలు",
+      feeNotListed: "రుసుము నమోదు చేయలేదు",
+      consultationFee: "సంప్రదింపుల రుసుము",
+      femaleDoctorToggle: "మహిళా వైద్యురాలు మాత్రమే",
+      femaleDoctorBadge: "అభ్యర్థనపై మహిళా వైద్యురాలు",
+      languageFilter: "భాష ద్వారా ఫిల్టర్ చేయండి",
+      allLanguages: "అన్ని భాషలు",
+      budgetFilterTitle: "బడ్జెట్ (సంప్రదింపుల రుసుము)",
+      budgetAny: "ఏదైనా బడ్జెట్",
+      budgetUnder500: "₹500 లోపు",
+      budget500To1000: "₹500 నుండి ₹1,000",
+      budgetAbove1000: "₹1,000 పైన",
+      hiddenFacilitiesNotice: "రుసుము నమోదు చేయని కేంద్రాలు దాచబడ్డాయి",
+      emergencyCallout: "అత్యవసర పరిస్థితులకు వెంటనే 112 కు కాల్ చేయండి లేదా సమీప ఎమర్జెన్సీ విభాగానికి వెళ్ళండి.",
+      demoDisclaimer: "ప్రదర్శన వెబ్‌సైట్. వైద్యులు, రోగులు మరియు విషయాలన్నీ కల్పితమైనవి.",
+      machineTranslationDemo: "యంత్ర సహాయక అనువాదం (డెమో)",
+      sortBy: "క్రమబద్ధీకరించు",
+      sortDefault: "సిఫార్సు చేయబడినవి",
+      sortFeeAsc: "రుసుము: తక్కువ నుండి ఎక్కువ",
+      sortFeeDesc: "రుసుము: ఎక్కువ నుండి తక్కువ",
+      sortNearest: "సమీపంలోనివి ముందుగా",
     },
   },
 };
 
 /**
- * Returns dictionary strings for the given locale with safe fallback to English.
+ * Returns dictionary strings for the given locale with recursive safe fallback to English.
+ * Any missing key in another locale seamlessly falls back to English, avoiding empty strings or broken glyphs.
  */
 export function getDictionary(locale: SupportedLocale = "en"): DictionaryStrings {
-  return dictionaries[locale] || dictionaries.en;
+  const chosen = dictionaries[locale] || dictionaries.en;
+  const en = dictionaries.en;
+
+  return {
+    nav: { ...en.nav, ...(chosen.nav || {}) },
+    hero: { ...en.hero, ...(chosen.hero || {}) },
+    sections: { ...en.sections, ...(chosen.sections || {}) },
+    common: { ...en.common, ...(chosen.common || {}) },
+  };
 }

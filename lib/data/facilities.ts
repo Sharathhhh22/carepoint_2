@@ -1,5 +1,11 @@
 export type FacilityType = "Clinic" | "Hospital" | "Diagnostic centre";
 
+export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+export type OpeningHours = {
+  [day in Weekday]: [string, string] | null; // e.g. ["09:00", "20:00"] or null for closed
+};
+
 export interface Facility {
   id: string;
   name: string;
@@ -9,7 +15,11 @@ export interface Facility {
   address: string;
   phone: string;
   fee: number | null;
+  feeNote?: string | null;
   timings: string;
+  openingHours: OpeningHours;
+  latitude: number;
+  longitude: number;
   specialities: string[];
   verified: boolean;
   sampleRating: number;
@@ -27,12 +37,24 @@ export const facilitiesData: Facility[] = [
     address: "12, 14th Main Road, HAL 2nd Stage, Indiranagar, Bengaluru, Karnataka 560038",
     phone: "+91 555 014 8821",
     fee: 400,
+    feeNote: "Sample consultation fee. Includes first follow-up within 7 days.",
     timings: "Mon-Sat: 08:30 AM - 07:30 PM",
+    openingHours: {
+      mon: ["08:30", "19:30"],
+      tue: ["08:30", "19:30"],
+      wed: ["08:30", "19:30"],
+      thu: ["08:30", "19:30"],
+      fri: ["08:30", "19:30"],
+      sat: ["08:30", "19:30"],
+      sun: null,
+    },
+    latitude: 12.9784,
+    longitude: 77.6408,
     specialities: ["General physician", "Paediatrics", "Dermatology"],
     verified: true,
     sampleRating: 4.8,
     sampleReviewCount: 142,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=12+14th+Main+Road+HAL+Indiranagar+Bengaluru",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=12.9784,77.6408",
   },
   {
     id: "fac-blr-02",
@@ -43,12 +65,24 @@ export const facilitiesData: Facility[] = [
     address: "88, 5th Block, Jyoti Nivas College Road, Koramangala, Bengaluru, Karnataka 560095",
     phone: "+91 555 019 4432",
     fee: 850,
+    feeNote: "Specialist consultation fee. Emergency triage active 24/7.",
     timings: "24/7 Day & Night (Emergency Desk)",
+    openingHours: {
+      mon: ["00:00", "23:59"],
+      tue: ["00:00", "23:59"],
+      wed: ["00:00", "23:59"],
+      thu: ["00:00", "23:59"],
+      fri: ["00:00", "23:59"],
+      sat: ["00:00", "23:59"],
+      sun: ["00:00", "23:59"],
+    },
+    latitude: 12.9352,
+    longitude: 77.6245,
     specialities: ["Cardiology", "Orthopaedics", "Gynaecology", "General physician"],
     verified: true,
     sampleRating: 4.7,
     sampleReviewCount: 318,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=88+5th+Block+Koramangala+Bengaluru",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=12.9352,77.6245",
   },
   {
     id: "fac-blr-03",
@@ -59,12 +93,24 @@ export const facilitiesData: Facility[] = [
     address: "24, ITPL Main Road, Prestige Shantiniketan Annex, Whitefield, Bengaluru, Karnataka 560066",
     phone: "+91 555 017 3390",
     fee: null, // Tests "Fee not listed" and budget hiding behavior
+    feeNote: null,
     timings: "Mon-Sun: 07:00 AM - 09:00 PM",
+    openingHours: {
+      mon: ["07:00", "21:00"],
+      tue: ["07:00", "21:00"],
+      wed: ["07:00", "21:00"],
+      thu: ["07:00", "21:00"],
+      fri: ["07:00", "21:00"],
+      sat: ["07:00", "21:00"],
+      sun: ["07:00", "21:00"],
+    },
+    latitude: 12.9698,
+    longitude: 77.75,
     specialities: ["Cardiology", "General physician"],
     verified: true,
     sampleRating: 4.6,
     sampleReviewCount: 96,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=24+ITPL+Main+Road+Whitefield+Bengaluru",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=12.9698,77.7500",
   },
   {
     id: "fac-blr-04",
@@ -75,12 +121,24 @@ export const facilitiesData: Facility[] = [
     address: "45, 9th Main Road, 4th Block, Jayanagar, Bengaluru, Karnataka 560011",
     phone: "+91 555 012 7711",
     fee: 500,
+    feeNote: "Covers standard medical consultation. Diagnostic tests billed separately.",
     timings: "Mon-Sat: 09:00 AM - 08:00 PM",
+    openingHours: {
+      mon: ["09:00", "20:00"],
+      tue: ["09:00", "20:00"],
+      wed: ["09:00", "20:00"],
+      thu: ["09:00", "20:00"],
+      fri: ["09:00", "20:00"],
+      sat: ["09:00", "20:00"],
+      sun: null,
+    },
+    latitude: 12.9308,
+    longitude: 77.5838,
     specialities: ["Dentist", "Eye care", "General physician"],
     verified: true,
     sampleRating: 4.9,
     sampleReviewCount: 215,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=45+9th+Main+Road+Jayanagar+Bengaluru",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=12.9308,77.5838",
   },
   {
     id: "fac-mum-01",
@@ -91,12 +149,24 @@ export const facilitiesData: Facility[] = [
     address: "19, Perry Cross Road, Near Turner Road, Bandra West, Mumbai, Maharashtra 400050",
     phone: "+91 555 018 6620",
     fee: 1200,
+    feeNote: "Super-specialist OPD consultation fee. Prior booking suggested.",
     timings: "24/7 Day & Night (Emergency Desk)",
+    openingHours: {
+      mon: ["00:00", "23:59"],
+      tue: ["00:00", "23:59"],
+      wed: ["00:00", "23:59"],
+      thu: ["00:00", "23:59"],
+      fri: ["00:00", "23:59"],
+      sat: ["00:00", "23:59"],
+      sun: ["00:00", "23:59"],
+    },
+    latitude: 19.0596,
+    longitude: 72.8295,
     specialities: ["Orthopaedics", "Cardiology", "Dermatology"],
     verified: true,
     sampleRating: 4.8,
     sampleReviewCount: 284,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=19+Perry+Cross+Road+Bandra+West+Mumbai",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=19.0596,72.8295",
   },
   {
     id: "fac-mum-02",
@@ -107,12 +177,24 @@ export const facilitiesData: Facility[] = [
     address: "7, Central Avenue, Hiranandani Gardens, Powai, Mumbai, Maharashtra 400076",
     phone: "+91 555 011 2289",
     fee: 450,
+    feeNote: "General practitioner consultation fee (sample).",
     timings: "Mon-Sat: 08:00 AM - 08:30 PM",
+    openingHours: {
+      mon: ["08:00", "20:30"],
+      tue: ["08:00", "20:30"],
+      wed: ["08:00", "20:30"],
+      thu: ["08:00", "20:30"],
+      fri: ["08:00", "20:30"],
+      sat: ["08:00", "20:30"],
+      sun: null,
+    },
+    latitude: 19.1176,
+    longitude: 72.906,
     specialities: ["General physician", "Paediatrics", "Dentist"],
     verified: true,
     sampleRating: 4.7,
     sampleReviewCount: 167,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=7+Central+Avenue+Powai+Mumbai",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=19.1176,72.9060",
   },
   {
     id: "fac-mum-03",
@@ -123,12 +205,24 @@ export const facilitiesData: Facility[] = [
     address: "31, Gokhale Road North, Dadar West, Mumbai, Maharashtra 400028",
     phone: "+91 555 016 5543",
     fee: null, // Fee not listed
+    feeNote: null,
     timings: "Mon-Sun: 08:00 AM - 10:00 PM",
+    openingHours: {
+      mon: ["08:00", "22:00"],
+      tue: ["08:00", "22:00"],
+      wed: ["08:00", "22:00"],
+      thu: ["08:00", "22:00"],
+      fri: ["08:00", "22:00"],
+      sat: ["08:00", "22:00"],
+      sun: ["08:00", "22:00"],
+    },
+    latitude: 19.0178,
+    longitude: 72.8478,
     specialities: ["Gynaecology", "General physician", "Eye care"],
     verified: true,
     sampleRating: 4.5,
     sampleReviewCount: 130,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=31+Gokhale+Road+Dadar+Mumbai",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=19.0178,72.8478",
   },
   {
     id: "fac-del-01",
@@ -139,12 +233,24 @@ export const facilitiesData: Facility[] = [
     address: "15, Press Enclave Marg, Sector 6, Saket, New Delhi, Delhi 110017",
     phone: "+91 555 013 9944",
     fee: 950,
+    feeNote: "Cardiology & Surgery consult fee. Cashless insurance desk on-site (demo).",
     timings: "24/7 Day & Night (Emergency Desk)",
+    openingHours: {
+      mon: ["00:00", "23:59"],
+      tue: ["00:00", "23:59"],
+      wed: ["00:00", "23:59"],
+      thu: ["00:00", "23:59"],
+      fri: ["00:00", "23:59"],
+      sat: ["00:00", "23:59"],
+      sun: ["00:00", "23:59"],
+    },
+    latitude: 28.5245,
+    longitude: 77.2066,
     specialities: ["Cardiology", "Orthopaedics", "Gynaecology", "General physician"],
     verified: true,
     sampleRating: 4.9,
     sampleReviewCount: 390,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=15+Press+Enclave+Marg+Saket+New+Delhi",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=28.5245,77.2066",
   },
   {
     id: "fac-del-02",
@@ -155,12 +261,24 @@ export const facilitiesData: Facility[] = [
     address: "21, Sector 11 Pocket 3, Dwarka, New Delhi, Delhi 110075",
     phone: "+91 555 015 1198",
     fee: 480,
+    feeNote: "Family clinic consultation fee (sample).",
     timings: "Mon-Sat: 09:00 AM - 07:00 PM",
+    openingHours: {
+      mon: ["09:00", "19:00"],
+      tue: ["09:00", "19:00"],
+      wed: ["09:00", "19:00"],
+      thu: ["09:00", "19:00"],
+      fri: ["09:00", "19:00"],
+      sat: ["09:00", "19:00"],
+      sun: null,
+    },
+    latitude: 28.5921,
+    longitude: 77.046,
     specialities: ["General physician", "Dentist", "Paediatrics"],
     verified: true,
     sampleRating: 4.6,
     sampleReviewCount: 112,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=21+Sector+11+Dwarka+New+Delhi",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=28.5921,77.0460",
   },
   {
     id: "fac-del-03",
@@ -171,11 +289,23 @@ export const facilitiesData: Facility[] = [
     address: "50, Nelson Mandela Marg, Pocket 2, Vasant Kunj, New Delhi, Delhi 110070",
     phone: "+91 555 018 7765",
     fee: 650,
+    feeNote: "General physician health review and lab report consultation (sample).",
     timings: "Mon-Sun: 07:30 AM - 08:30 PM",
+    openingHours: {
+      mon: ["07:30", "20:30"],
+      tue: ["07:30", "20:30"],
+      wed: ["07:30", "20:30"],
+      thu: ["07:30", "20:30"],
+      fri: ["07:30", "20:30"],
+      sat: ["07:30", "20:30"],
+      sun: ["07:30", "20:30"],
+    },
+    latitude: 28.5298,
+    longitude: 77.1558,
     specialities: ["Eye care", "Dermatology", "General physician"],
     verified: true,
     sampleRating: 4.7,
     sampleReviewCount: 184,
-    directionsUrl: "https://www.google.com/maps/search/?api=1&query=50+Nelson+Mandela+Marg+Vasant+Kunj+New+Delhi",
+    directionsUrl: "https://www.google.com/maps/search/?api=1&query=28.5298,77.1558",
   },
 ];

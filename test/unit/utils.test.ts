@@ -5,9 +5,14 @@ import {
   matchesBudget,
   filterFacilities,
   filterDoctors,
+  haversineKm,
+  openNowStatus,
+  sortByFee,
+  sortByDistance,
 } from "@/lib/utils";
-import { facilitiesData } from "@/lib/data/facilities";
+import { facilitiesData, OpeningHours } from "@/lib/data/facilities";
 import { doctorsData } from "@/lib/data/doctors";
+import { getGlossaryItem, glossaryData } from "@/lib/data/glossary";
 
 describe("lib/utils unit tests", () => {
   describe("formatINR", () => {
@@ -23,6 +28,151 @@ describe("lib/utils unit tests", () => {
       const formatted1250 = formatINR(1250);
       expect(formatted1250).toContain("₹");
       expect(formatted1250).toContain("1,250");
+    });
+
+    it("formats Indian numbers with en-IN grouping (₹1,00,000)", () => {
+      const formattedOneLakh = formatINR(100000);
+      expect(formattedOneLakh).toContain("₹");
+      expect(formattedOneLakh).toContain("1,00,000");
+    });
+  });
+
+  describe("haversineKm", () => {
+    it("calculates zero distance for identical coordinates", () => {
+      expect(haversineKm(12.9784, 77.6408, 12.9784, 77.6408)).toBe(0);
+    });
+
+    it("calculates accurate straight-line distance between Bengaluru localities", () => {
+      // Indiranagar (12.9784, 77.6408) to Koramangala (12.9352, 77.6245)
+      const dist = haversineKm(12.9784, 77.6408, 12.9352, 77.6245);
+      expect(dist).toBeGreaterThan(4);
+      expect(dist).toBeLessThan(6);
+      expect(dist).toBe(5.1);
+    });
+
+    it("calculates distance between Bengaluru and Mumbai", () => {
+      // Bengaluru to Mumbai is roughly 840-850 km straight-line
+      const dist = haversineKm(12.9716, 77.5946, 19.0760, 72.8777);
+      expect(dist).toBeGreaterThan(830);
+      expect(dist).toBeLessThan(860);
+    });
+  });
+
+  describe("openNowStatus with fixed clock", () => {
+    const sampleHours: OpeningHours = {
+      mon: ["08:30", "19:30"],
+      tue: ["08:30", "19:30"],
+      wed: ["08:30", "19:30"],
+      thu: ["08:30", "19:30"],
+      fri: ["08:30", "19:30"],
+      sat: ["08:30", "19:30"],
+      sun: null,
+    };
+
+    it("reports open when current time in Asia/Kolkata is within operating hours", () => {
+      // Monday 10:30 AM IST
+      const monday1030 = new Date("2026-10-19T10:30:00+05:30");
+      const status = openNowStatus(sampleHours, monday1030);
+      expect(status.isOpen).toBe(true);
+      expect(status.text).toBe("Open now until 7:30 PM");
+    });
+
+    it("reports closed when current time is past closing time on the same day", () => {
+      // Monday 8:45 PM IST
+      const monday2045 = new Date("2026-10-19T20:45:00+05:30");
+      const status = openNowStatus(sampleHours, monday2045);
+      expect(status.isOpen).toBe(false);
+      expect(status.text).toBe("Closed. Opens Tomorrow 8:30 AM");
+    });
+
+    it("reports closed and next opening day when closed on Sunday", () => {
+      // Sunday 11:00 AM IST
+      const sunday1100 = new Date("2026-10-18T11:00:00+05:30");
+      const status = openNowStatus(sampleHours, sunday1100);
+      expect(status.isOpen).toBe(false);
+      expect(status.text).toBe("Closed. Opens Tomorrow 8:30 AM");
+    });
+
+    it("reports 24/7 status for emergency desk hospitals", () => {
+      const hospitalHours: OpeningHours = {
+        mon: ["00:00", "23:59"],
+        tue: ["00:00", "23:59"],
+        wed: ["00:00", "23:59"],
+        thu: ["00:00", "23:59"],
+        fri: ["00:00", "23:59"],
+        sat: ["00:00", "23:59"],
+        sun: ["00:00", "23:59"],
+      };
+      const anyTime = new Date("2026-10-19T03:15:00+05:30");
+      const status = openNowStatus(hospitalHours, anyTime);
+      expect(status.isOpen).toBe(true);
+      expect(status.text).toBe("Open now 24/7");
+    });
+  });
+
+  describe("sortByFee and sortByDistance", () => {
+    it("sorts items by fee in ascending order with nulls last", () => {
+      const items = [{ fee: 850 }, { fee: null }, { fee: 400 }, { fee: 1200 }];
+      const sorted = sortByFee(items, "asc");
+      expect(sorted.map((i) => i.fee)).toEqual([400, 850, 1200, null]);
+    });
+
+    it("sorts items by fee in descending order with nulls last", () => {
+      const items = [{ fee: 850 }, { fee: null }, { fee: 400 }, { fee: 1200 }];
+      const sorted = sortByFee(items, "desc");
+      expect(sorted.map((i) => i.fee)).toEqual([1200, 850, 400, null]);
+    });
+
+    it("sorts items by distance ascending", () => {
+      const items = [
+        { name: "Far", distanceKm: 8.4 },
+        { name: "Closest", distanceKm: 1.2 },
+        { name: "Middle", distanceKm: 4.5 },
+      ];
+      const sorted = sortByDistance(items);
+      expect(sorted[0].name).toBe("Closest");
+      expect(sorted[1].name).toBe("Middle");
+      expect(sorted[2].name).toBe("Far");
+    });
+  });
+
+  describe("glossary lookup", () => {
+    it("retrieves plain explanation for required medical terms", () => {
+      const opd = getGlossaryItem("opd");
+      expect(opd).toBeDefined();
+      expect(opd?.plainExplanation).toContain("Outpatient visit");
+
+      const followUp = getGlossaryItem("follow-up");
+      expect(followUp).toBeDefined();
+      expect(followUp?.plainExplanation).toContain("subsequent review consultation");
+
+      const cashless = getGlossaryItem("cashless-claim");
+      expect(cashless).toBeDefined();
+
+      const preAuth = getGlossaryItem("pre-authorisation");
+      expect(preAuth).toBeDefined();
+
+      const gp = getGlossaryItem("general-physician");
+      expect(gp).toBeDefined();
+
+      const specialist = getGlossaryItem("specialist");
+      expect(specialist).toBeDefined();
+
+      const fee = getGlossaryItem("consultation-fee");
+      expect(fee).toBeDefined();
+    });
+
+    it("returns undefined for unknown glossary terms", () => {
+      expect(getGlossaryItem("non-existent-term-xyz")).toBeUndefined();
+    });
+
+    it("contains translations for all 5 supported languages in glossary", () => {
+      const opd = getGlossaryItem("opd");
+      expect(opd?.translations.en).toBeDefined();
+      expect(opd?.translations.hi).toBeDefined();
+      expect(opd?.translations.kn).toBeDefined();
+      expect(opd?.translations.ta).toBeDefined();
+      expect(opd?.translations.te).toBeDefined();
     });
   });
 

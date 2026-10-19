@@ -20,7 +20,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as SupportedLocale | null;
-      if (saved && (saved === "en" || saved === "hi" || saved === "kn" || saved === "ta")) {
+      if (
+        saved &&
+        (saved === "en" ||
+          saved === "hi" ||
+          saved === "kn" ||
+          saved === "ta" ||
+          saved === "te")
+      ) {
         setLocaleState(saved);
         document.documentElement.lang = saved;
       } else {

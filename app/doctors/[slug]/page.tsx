@@ -17,8 +17,12 @@ import {
   Award,
   ShieldCheck,
   ExternalLink,
+  CheckCircle2,
+  AlertCircle,
+  FileText,
 } from "lucide-react";
 import { DoctorProfileClient } from "./DoctorProfileClient";
+import { DoctorReviews } from "@/components/doctor/DoctorReviews";
 
 interface DoctorPageProps {
   params: Promise<{
@@ -149,89 +153,178 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
           </div>
         </div>
 
-        {/* Detailed Grid: Bio & Facility Info */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Bio (7 cols) */}
-          <div className="lg:col-span-7 bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
-            <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3">
-              Professional Biography
-            </h2>
-            <p className="text-base text-ink/85 leading-relaxed">
-              {doctor.bio}
-            </p>
+        {/* Detailed Grid: Bio, What's Included, & Facility Info */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+          {/* Left Column: Bio & What's Included (7 cols) */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Bio Card */}
+            <div className="bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
+              <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3">
+                Professional Biography
+              </h2>
+              <p className="text-base text-ink/85 leading-relaxed">
+                {doctor.bio}
+              </p>
 
-            <h3 className="text-base font-bold text-maroon pt-3">
-              Clinical Experience & Special Interests
-            </h3>
-            <ul className="list-disc pl-5 space-y-1.5 text-sm text-ink/80">
-              <li>Comprehensive patient examinations and personalized care pathways.</li>
-              <li>Collaborative multi-specialty reviews for complex presentations.</li>
-              <li>Patient education on preventive lifestyle adjustments.</li>
-            </ul>
+              <h3 className="text-base font-bold text-maroon pt-3">
+                Clinical Focus & Methodology
+              </h3>
+              <ul className="list-disc pl-5 space-y-1.5 text-sm text-ink/80">
+                <li>Patient-centered evaluation emphasizing evidence-informed medical guidance.</li>
+                <li>Preventive lifestyle and nutritional recommendations to safeguard long-term health.</li>
+                <li>Collaborative multi-specialty reviews where appropriate for complex cases.</li>
+              </ul>
+            </div>
 
-            <div className="p-3.5 bg-teal/10 border border-teal/20 rounded-DEFAULT text-xs text-teal leading-relaxed font-medium mt-4">
-              <ShieldCheck className="size-4 inline mr-1.5 -mt-0.5" />
-              This profile is part of CarePoint’s demonstration dataset. Fictional doctor and facility data for RYNX Digital Media Category 7.
+            {/* Q1: "What's Included" Card */}
+            <div className="bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
+              <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3 flex items-center gap-2">
+                <FileText className="size-5 text-teal" />
+                <span>What’s Included in Consultation</span>
+              </h2>
+
+              <ul className="space-y-3 pt-1">
+                {doctor.whatsIncluded.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5 text-sm text-ink/85 font-medium">
+                    <CheckCircle2 className="size-4 text-teal shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="p-3 bg-cream-muted rounded-DEFAULT text-xs text-ink-subtle leading-relaxed border border-ink/5 mt-3">
+                Sample fees. Excludes applicable taxes. Tests and procedures are charged separately. Confirm with clinic before visiting.
+              </div>
             </div>
           </div>
 
-          {/* Facility Location Link Card (5 cols) */}
-          <div className="lg:col-span-5 bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
-            <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3 flex items-center gap-2">
-              <Building2 className="size-5 text-maroon" />
-              <span>Practicing Facility</span>
-            </h2>
+          {/* Right Column: Verified Qualifications Block & Facility (5 cols) */}
+          <div className="lg:col-span-5 space-y-8">
+            {/* Q3: Qualifications Block */}
+            <div className="bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
+              <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3 flex items-center gap-2">
+                <ShieldCheck className="size-5 text-teal" />
+                <span>Qualifications & Credentials</span>
+              </h2>
 
-            {facility ? (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Badge variant="default" size="sm">
-                    {facility.type}
-                  </Badge>
-                  <Badge variant="teal" size="sm">
-                    Sample verification
-                  </Badge>
+              <div className="space-y-3.5">
+                {/* Qualification */}
+                <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs uppercase font-bold text-ink/60">Degree Qualification</span>
+                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                  </div>
+                  <div className="text-sm font-semibold text-ink">{doctor.qualification}</div>
                 </div>
 
-                <h3 className="text-lg font-bold text-maroon">
-                  {facility.name}
-                </h3>
+                {/* Specialty */}
+                <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs uppercase font-bold text-ink/60">Medical Specialty</span>
+                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                  </div>
+                  <div className="text-sm font-semibold text-ink">{doctor.specialty}</div>
+                </div>
 
-                <p className="text-xs sm:text-sm text-ink/80 flex items-start gap-2">
-                  <MapPin className="size-4 text-teal shrink-0 mt-0.5" />
-                  <span>{facility.address}</span>
-                </p>
+                {/* Experience */}
+                <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs uppercase font-bold text-ink/60">Clinical Experience</span>
+                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                  </div>
+                  <div className="text-sm font-semibold text-ink">{doctor.experienceYears} Years active clinical practice</div>
+                </div>
 
-                <p className="text-xs text-ink/75 flex items-center gap-2">
-                  <Clock className="size-4 text-saffron shrink-0" />
-                  <span>{facility.timings}</span>
-                </p>
+                {/* Languages */}
+                <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs uppercase font-bold text-ink/60">Languages Spoken</span>
+                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                  </div>
+                  <div className="text-sm font-semibold text-ink">{doctor.languages.join(", ")}</div>
+                </div>
 
-                <div className="pt-2 flex flex-col gap-2">
-                  <a
-                    href={facility.directionsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-DEFAULT border border-ink/20 text-xs sm:text-sm font-semibold text-ink hover:bg-cream transition-colors"
-                  >
-                    <ExternalLink className="size-4" />
-                    <span>Get Directions (Google Maps)</span>
-                  </a>
-
-                  <Link href={`/#clinics`}>
-                    <Button variant="ghost" size="sm" fullWidth>
-                      View All Facilities
-                    </Button>
-                  </Link>
+                {/* Facility */}
+                <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs uppercase font-bold text-ink/60">Practicing Facility</span>
+                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                  </div>
+                  <div className="text-sm font-semibold text-ink">{facility ? facility.name : "CarePoint Facility"}</div>
                 </div>
               </div>
-            ) : (
-              <p className="text-sm text-ink/70">
-                Facility information currently unavailable.
-              </p>
-            )}
+
+              {/* Mandatory Medical Council Register Note */}
+              <div className="p-3.5 bg-amber-50 border border-amber-200/80 rounded-DEFAULT text-xs text-amber-900 leading-relaxed font-medium">
+                <AlertCircle className="size-4 inline text-amber-700 mr-1.5 -mt-0.5" />
+                In a live listing, qualifications would be checked against the official medical council register. This demo shows sample data only.
+              </div>
+            </div>
+
+            {/* Practicing Facility Card */}
+            <div className="bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8 space-y-4">
+              <h2 className="text-xl font-bold text-maroon border-b border-ink/10 pb-3 flex items-center gap-2">
+                <Building2 className="size-5 text-maroon" />
+                <span>Facility Details</span>
+              </h2>
+
+              {facility ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="default" size="sm">
+                      {facility.type}
+                    </Badge>
+                    <Badge variant="teal" size="sm">
+                      Sample verification
+                    </Badge>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-maroon">
+                    {facility.name}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-ink/80 flex items-start gap-2">
+                    <MapPin className="size-4 text-teal shrink-0 mt-0.5" />
+                    <span>{facility.address}</span>
+                  </p>
+
+                  <p className="text-xs text-ink/75 flex items-center gap-2">
+                    <Clock className="size-4 text-saffron shrink-0" />
+                    <span>{facility.timings}</span>
+                  </p>
+
+                  <div className="pt-2 flex flex-col gap-2">
+                    <a
+                      href={facility.directionsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-DEFAULT border border-ink/20 text-xs sm:text-sm font-semibold text-ink hover:bg-cream transition-colors"
+                    >
+                      <ExternalLink className="size-4 text-teal" />
+                      <span>Get Directions (Google Maps)</span>
+                    </a>
+
+                    <Link href={`/#clinics`}>
+                      <Button variant="ghost" size="sm" fullWidth>
+                        View All Facilities
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-ink/70">
+                  Facility information currently unavailable.
+                </p>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Q3: Sample Reviews (Fictional) Section */}
+        <DoctorReviews
+          reviews={doctor.reviews}
+          overallRating={4.8}
+        />
       </Container>
     </div>
   );

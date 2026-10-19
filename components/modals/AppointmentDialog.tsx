@@ -11,6 +11,11 @@ import {
   CheckCircle2,
   ArrowLeft,
   ArrowRight,
+  Sun,
+  Sunset,
+  Moon,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -35,6 +40,7 @@ interface AppointmentDialogProps {
 interface TimeSlot {
   time: string;
   isBooked: boolean;
+  period: "morning" | "afternoon" | "evening";
 }
 
 export function AppointmentDialog({
@@ -85,18 +91,22 @@ export function AppointmentDialog({
     return dates;
   }, []);
 
-  // Time slots list with sample booked items
+  // Time slots grouped by period
   const timeSlots: TimeSlot[] = [
-    { time: "09:30 AM", isBooked: false },
-    { time: "10:15 AM", isBooked: true },
-    { time: "11:00 AM", isBooked: false },
-    { time: "11:45 AM", isBooked: false },
-    { time: "02:30 PM", isBooked: false },
-    { time: "03:15 PM", isBooked: true },
-    { time: "04:00 PM", isBooked: false },
-    { time: "04:45 PM", isBooked: false },
-    { time: "05:30 PM", isBooked: false },
-    { time: "06:15 PM", isBooked: false },
+    // Morning
+    { time: "09:30 AM", isBooked: false, period: "morning" },
+    { time: "10:15 AM", isBooked: true, period: "morning" },
+    { time: "11:00 AM", isBooked: false, period: "morning" },
+    { time: "11:45 AM", isBooked: false, period: "morning" },
+    // Afternoon
+    { time: "02:30 PM", isBooked: false, period: "afternoon" },
+    { time: "03:15 PM", isBooked: true, period: "afternoon" },
+    { time: "04:00 PM", isBooked: false, period: "afternoon" },
+    { time: "04:45 PM", isBooked: false, period: "afternoon" },
+    // Evening
+    { time: "05:30 PM", isBooked: false, period: "evening" },
+    { time: "06:15 PM", isBooked: false, period: "evening" },
+    { time: "07:00 PM", isBooked: false, period: "evening" },
   ];
 
   // Set default date when list generated
@@ -172,14 +182,14 @@ export function AppointmentDialog({
     }
   };
 
-  // Keyboard navigation for time slot radio group
+  // Keyboard navigation for time slot radio group across all selectable slots
   const handleSlotKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement>,
-    currentIndex: number
+    currentTime: string
   ) => {
     const selectableSlots = timeSlots.filter((s) => !s.isBooked);
     const selectableIndex = selectableSlots.findIndex(
-      (s) => s.time === timeSlots[currentIndex].time
+      (s) => s.time === currentTime
     );
 
     let nextIndex = selectableIndex;
@@ -188,7 +198,8 @@ export function AppointmentDialog({
       nextIndex = (selectableIndex + 1) % selectableSlots.length;
     } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
-      nextIndex = (selectableIndex - 1 + selectableSlots.length) % selectableSlots.length;
+      nextIndex =
+        (selectableIndex - 1 + selectableSlots.length) % selectableSlots.length;
     }
 
     if (nextIndex !== -1 && selectableSlots[nextIndex]) {
@@ -213,6 +224,18 @@ export function AppointmentDialog({
       "success"
     );
   };
+
+  // Upfront fee determination
+  const feeDisplay = doctor
+    ? formatINR(doctor.fee)
+    : facility?.fee !== null && facility?.fee !== undefined
+    ? formatINR(facility.fee)
+    : "Fee not listed";
+
+  // Earliest available string
+  const earliestAvailable = doctor?.nextAvailable
+    ? doctor.nextAvailable.replace(/\s*\(Demo\)/i, "")
+    : "Tomorrow, 09:30 AM";
 
   return (
     <dialog
@@ -253,7 +276,35 @@ export function AppointmentDialog({
 
         {/* STEP 1: Consultation Type, Date & Time Slot Grid */}
         {step === 1 && (
-          <div className="space-y-6 pt-5">
+          <div className="space-y-5 pt-4">
+            {/* Q5 Requirement: Show fee at the top before any time is chosen */}
+            <div className="p-3.5 bg-amber-50/80 border border-amber-200 rounded-DEFAULT flex items-center justify-between gap-2">
+              <div>
+                <span className="text-[11px] uppercase tracking-wider font-bold text-ink/60 block">
+                  Consultation Fee (DEMO)
+                </span>
+                <span className="text-xl sm:text-2xl font-extrabold text-maroon">
+                  {feeDisplay}
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-[11px] text-ink-subtle block">
+                  Sample tariff
+                </span>
+                <span className="text-xs font-semibold text-teal">
+                  Excludes taxes
+                </span>
+              </div>
+            </div>
+
+            {/* Q5 Requirement: Earliest available line at the top */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-teal bg-teal/10 px-3 py-2 rounded-DEFAULT border border-teal/20">
+              <Sparkles className="size-4 shrink-0 text-teal" />
+              <span>
+                Earliest available: {earliestAvailable} (sample)
+              </span>
+            </div>
+
             {/* Consultation Type Selector */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-ink/75 mb-2">
@@ -321,59 +372,162 @@ export function AppointmentDialog({
               </div>
             </div>
 
-            {/* Time Slot Grid (Radio Group with Arrow Keys) */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
+            {/* Q5 Requirement: Slots grouped under Morning, Afternoon, and Evening */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                   3. Select Time Slot
                 </label>
-                <span className="text-[11px] text-ink/60">
-                  Navigate with arrow keys
+                <span className="text-[11px] text-ink/60 flex items-center gap-1">
+                  <Clock className="size-3" /> Navigate with arrow keys
                 </span>
               </div>
 
-              <div
-                role="radiogroup"
-                aria-label="Appointment time slots"
-                className="grid grid-cols-2 sm:grid-cols-3 gap-2"
-              >
-                {timeSlots.map((slot, index) => {
-                  const isChecked = selectedSlot === slot.time;
-                  return (
-                    <div
-                      key={slot.time}
-                      id={`slot-radio-${slot.time}`}
-                      role="radio"
-                      aria-checked={isChecked}
-                      aria-disabled={slot.isBooked}
-                      tabIndex={slot.isBooked ? -1 : isChecked ? 0 : -1}
-                      onClick={() => {
-                        if (!slot.isBooked) {
-                          setSelectedSlot(slot.time);
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (!slot.isBooked) {
-                          handleSlotKeyDown(e, index);
-                        }
-                      }}
-                      className={`p-2.5 rounded-DEFAULT text-xs text-center font-medium border select-none transition-all ${
-                        slot.isBooked
-                          ? "bg-ink/5 text-ink/40 border-ink/10 cursor-not-allowed line-through"
-                          : isChecked
-                          ? "bg-saffron text-ink font-bold border-saffron shadow-sm ring-2 ring-saffron"
-                          : "bg-white text-ink border-ink/20 hover:bg-cream cursor-pointer"
-                      }`}
-                    >
-                      <div>{slot.time}</div>
-                      {slot.isBooked && (
-                        <div className="text-[10px] text-amber-800 font-semibold no-underline">
-                          Booked (sample)
+              {/* Morning Slots */}
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-maroon mb-2">
+                  <Sun className="size-3.5 text-saffron" />
+                  <span>Morning Slots</span>
+                </div>
+                <div
+                  role="radiogroup"
+                  aria-label="Morning appointment time slots"
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+                >
+                  {timeSlots
+                    .filter((s) => s.period === "morning")
+                    .map((slot) => {
+                      const isChecked = selectedSlot === slot.time;
+                      return (
+                        <div
+                          key={slot.time}
+                          id={`slot-radio-${slot.time}`}
+                          role="radio"
+                          aria-checked={isChecked}
+                          aria-disabled={slot.isBooked}
+                          tabIndex={slot.isBooked ? -1 : isChecked ? 0 : -1}
+                          onClick={() => {
+                            if (!slot.isBooked) setSelectedSlot(slot.time);
+                          }}
+                          onKeyDown={(e) => {
+                            if (!slot.isBooked) handleSlotKeyDown(e, slot.time);
+                          }}
+                          className={`p-2 rounded-DEFAULT text-xs text-center font-medium border select-none transition-all ${
+                            slot.isBooked
+                              ? "bg-ink/5 text-ink/40 border-ink/10 cursor-not-allowed line-through"
+                              : isChecked
+                              ? "bg-saffron text-ink font-bold border-saffron shadow-sm ring-2 ring-saffron"
+                              : "bg-white text-ink border-ink/20 hover:bg-cream cursor-pointer"
+                          }`}
+                        >
+                          <div>{slot.time}</div>
+                          {slot.isBooked && (
+                            <div className="text-[9px] text-amber-800 font-semibold no-underline">
+                              Booked (sample)
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                </div>
+              </div>
+
+              {/* Afternoon Slots */}
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-maroon mb-2">
+                  <Sunset className="size-3.5 text-saffron" />
+                  <span>Afternoon Slots</span>
+                </div>
+                <div
+                  role="radiogroup"
+                  aria-label="Afternoon appointment time slots"
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+                >
+                  {timeSlots
+                    .filter((s) => s.period === "afternoon")
+                    .map((slot) => {
+                      const isChecked = selectedSlot === slot.time;
+                      return (
+                        <div
+                          key={slot.time}
+                          id={`slot-radio-${slot.time}`}
+                          role="radio"
+                          aria-checked={isChecked}
+                          aria-disabled={slot.isBooked}
+                          tabIndex={slot.isBooked ? -1 : isChecked ? 0 : -1}
+                          onClick={() => {
+                            if (!slot.isBooked) setSelectedSlot(slot.time);
+                          }}
+                          onKeyDown={(e) => {
+                            if (!slot.isBooked) handleSlotKeyDown(e, slot.time);
+                          }}
+                          className={`p-2 rounded-DEFAULT text-xs text-center font-medium border select-none transition-all ${
+                            slot.isBooked
+                              ? "bg-ink/5 text-ink/40 border-ink/10 cursor-not-allowed line-through"
+                              : isChecked
+                              ? "bg-saffron text-ink font-bold border-saffron shadow-sm ring-2 ring-saffron"
+                              : "bg-white text-ink border-ink/20 hover:bg-cream cursor-pointer"
+                          }`}
+                        >
+                          <div>{slot.time}</div>
+                          {slot.isBooked && (
+                            <div className="text-[9px] text-amber-800 font-semibold no-underline">
+                              Booked (sample)
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              {/* Evening Slots */}
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-maroon mb-2">
+                  <Moon className="size-3.5 text-teal" />
+                  <span>Evening Slots</span>
+                </div>
+                <div
+                  role="radiogroup"
+                  aria-label="Evening appointment time slots"
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+                >
+                  {timeSlots
+                    .filter((s) => s.period === "evening")
+                    .map((slot) => {
+                      const isChecked = selectedSlot === slot.time;
+                      return (
+                        <div
+                          key={slot.time}
+                          id={`slot-radio-${slot.time}`}
+                          role="radio"
+                          aria-checked={isChecked}
+                          aria-disabled={slot.isBooked}
+                          tabIndex={slot.isBooked ? -1 : isChecked ? 0 : -1}
+                          onClick={() => {
+                            if (!slot.isBooked) setSelectedSlot(slot.time);
+                          }}
+                          onKeyDown={(e) => {
+                            if (!slot.isBooked) handleSlotKeyDown(e, slot.time);
+                          }}
+                          className={`p-2 rounded-DEFAULT text-xs text-center font-medium border select-none transition-all ${
+                            slot.isBooked
+                              ? "bg-ink/5 text-ink/40 border-ink/10 cursor-not-allowed line-through"
+                              : isChecked
+                              ? "bg-saffron text-ink font-bold border-saffron shadow-sm ring-2 ring-saffron"
+                              : "bg-white text-ink border-ink/20 hover:bg-cream cursor-pointer"
+                          }`}
+                        >
+                          <div>{slot.time}</div>
+                          {slot.isBooked && (
+                            <div className="text-[9px] text-amber-800 font-semibold no-underline">
+                              Booked (sample)
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
 
@@ -404,7 +558,9 @@ export function AppointmentDialog({
             {/* Summary Banner */}
             <div className="p-3 bg-cream/60 rounded-DEFAULT border border-ink/10 flex items-center justify-between text-xs">
               <span className="font-semibold text-maroon">
-                {consultationType === "in-clinic" ? "In-Clinic Visit" : "Video Consult"}
+                {consultationType === "in-clinic"
+                  ? "In-Clinic Visit"
+                  : "Video Consult"}
               </span>
               <span className="text-ink/80 font-medium">
                 {selectedDate} at {selectedSlot}
@@ -427,7 +583,11 @@ export function AppointmentDialog({
                 className="w-full px-3.5 py-2.5 text-sm bg-cream/20 text-ink rounded-DEFAULT border border-ink/20 focus:outline-none focus:ring-2 focus:ring-saffron"
               />
               {errors.patientName && (
-                <p id="name-error" role="alert" className="text-xs text-amber-700 mt-1 font-medium">
+                <p
+                  id="name-error"
+                  role="alert"
+                  className="text-xs text-amber-700 mt-1 font-medium"
+                >
                   {errors.patientName.message}
                 </p>
               )}
@@ -450,7 +610,11 @@ export function AppointmentDialog({
                   className="w-full px-3.5 py-2.5 text-sm bg-cream/20 text-ink rounded-DEFAULT border border-ink/20 focus:outline-none focus:ring-2 focus:ring-saffron"
                 />
                 {errors.phone && (
-                  <p id="phone-error" role="alert" className="text-xs text-amber-700 mt-1 font-medium">
+                  <p
+                    id="phone-error"
+                    role="alert"
+                    className="text-xs text-amber-700 mt-1 font-medium"
+                  >
                     {errors.phone.message}
                   </p>
                 )}
@@ -472,7 +636,11 @@ export function AppointmentDialog({
                   className="w-full px-3.5 py-2.5 text-sm bg-cream/20 text-ink rounded-DEFAULT border border-ink/20 focus:outline-none focus:ring-2 focus:ring-saffron"
                 />
                 {errors.email && (
-                  <p id="email-error" role="alert" className="text-xs text-amber-700 mt-1 font-medium">
+                  <p
+                    id="email-error"
+                    role="alert"
+                    className="text-xs text-amber-700 mt-1 font-medium"
+                  >
                     {errors.email.message}
                   </p>
                 )}
@@ -496,12 +664,14 @@ export function AppointmentDialog({
             </div>
 
             {/* Fee summary if doctor or facility provided */}
-            {doctor && (
-              <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-DEFAULT text-xs">
-                <span className="text-ink/80 font-medium">Sample Consultation Fee:</span>
-                <span className="font-bold text-maroon text-sm">{formatINR(doctor.fee)}</span>
-              </div>
-            )}
+            <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-DEFAULT text-xs">
+              <span className="text-ink/80 font-medium">
+                Sample Consultation Fee:
+              </span>
+              <span className="font-bold text-maroon text-sm">
+                {feeDisplay}
+              </span>
+            </div>
 
             {/* Step 2 Actions with Back Button that keeps selections */}
             <div className="pt-4 flex items-center justify-between border-t border-ink/10">
@@ -540,7 +710,9 @@ export function AppointmentDialog({
             <div className="p-4 bg-cream/50 rounded-DEFAULT border border-ink/10 text-xs text-ink/80 text-left space-y-1.5 max-w-sm mx-auto">
               <div>
                 <strong>Mode:</strong>{" "}
-                {consultationType === "in-clinic" ? "In-Clinic Consultation" : "Online Video Consult"}
+                {consultationType === "in-clinic"
+                  ? "In-Clinic Consultation"
+                  : "Online Video Consult"}
               </div>
               <div>
                 <strong>Date & Time:</strong> {selectedDate} at {selectedSlot}
@@ -550,10 +722,20 @@ export function AppointmentDialog({
                   <strong>Clinician:</strong> {doctor.name} ({doctor.specialty})
                 </div>
               )}
+              {facility && (
+                <div>
+                  <strong>Facility:</strong> {facility.name}
+                </div>
+              )}
             </div>
 
             <div className="pt-4">
-              <Button variant="primary" size="md" onClick={handleClose} fullWidth>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleClose}
+                fullWidth
+              >
                 Done
               </Button>
             </div>

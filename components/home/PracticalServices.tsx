@@ -7,17 +7,75 @@ import {
   FlaskConical,
   Check,
   Clock,
+  BookOpen,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { samplePricingData, diagnosticTestsData, DiagnosticTest } from "@/lib/data/services";
+import { GlossaryTerm } from "@/components/ui/GlossaryTerm";
+import { diagnosticTestsData, DiagnosticTest } from "@/lib/data/services";
 import { formatINR } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
 import { useToast } from "@/components/ui/Toast";
+
+interface ConsultationFeeGuide {
+  id: string;
+  consultationType: string;
+  termId?: string;
+  category: string;
+  feeRange: string;
+  duration: string;
+  includedNotes: string;
+}
+
+const consultationFeeGuideData: ConsultationFeeGuide[] = [
+  {
+    id: "cfg-1",
+    consultationType: "General Physician OPD Visit",
+    termId: "opd",
+    category: "Primary Care",
+    feeRange: "₹400 – ₹600",
+    duration: "15–20 mins",
+    includedNotes: "Primary medical evaluation, prescription, and vital checks.",
+  },
+  {
+    id: "cfg-2",
+    consultationType: "Specialist Clinical Consultation",
+    termId: "specialist",
+    category: "Specialist Care",
+    feeRange: "₹700 – ₹1,200",
+    duration: "20–30 mins",
+    includedNotes: "In-depth clinical assessment (Cardiology, Dermatology, Orthopaedics).",
+  },
+  {
+    id: "cfg-3",
+    consultationType: "Review & Follow-up Visit",
+    termId: "follow-up",
+    category: "Continuity Care",
+    feeRange: "₹0 – ₹300",
+    duration: "10–15 mins",
+    includedNotes: "Lab report review. Often complimentary if completed within 7 days (sample).",
+  },
+  {
+    id: "cfg-4",
+    consultationType: "Online Telehealth Video Consult",
+    category: "Virtual OPD",
+    feeRange: "₹350 – ₹600",
+    duration: "15 mins",
+    includedNotes: "Digital video consultation, e-prescription, and lifestyle counselling.",
+  },
+  {
+    id: "cfg-5",
+    consultationType: "Comprehensive Preventive Health Check",
+    category: "Wellness",
+    feeRange: "₹1,500 – ₹3,500",
+    duration: "45–60 mins",
+    includedNotes: "Doctor review, ECG review, baseline blood chemistry panel.",
+  },
+];
 
 export function PracticalServices() {
   const { dict } = useLanguage();
@@ -73,7 +131,8 @@ export function PracticalServices() {
               </h3>
 
               <p className="text-sm text-ink/75 leading-relaxed mb-6">
-                Consult with verified clinicians from the comfort of home. Ideal for follow-up reviews, lab report interpretations, and mild symptom triage across India.
+                Consult with verified clinicians from the comfort of home. Ideal for{" "}
+                <GlossaryTerm termId="follow-up">follow-up</GlossaryTerm> reviews, lab report interpretations, and mild symptom triage across India.
               </p>
 
               <div className="space-y-2 text-xs sm:text-sm text-ink/80 mb-6">
@@ -120,7 +179,10 @@ export function PracticalServices() {
               </h3>
 
               <p className="text-sm text-ink/75 leading-relaxed mb-6">
-                Reserve your prioritized time slot at leading multi-specialty clinics and hospitals in your locality. Minimal waiting time and verified facilities.
+                Reserve your prioritized time slot for an{" "}
+                <GlossaryTerm termId="opd">OPD</GlossaryTerm> visit with a{" "}
+                <GlossaryTerm termId="general-physician">general physician</GlossaryTerm> or{" "}
+                <GlossaryTerm termId="specialist">specialist</GlossaryTerm>. Minimal waiting time and verified facilities.
               </p>
 
               <div className="space-y-2 text-xs sm:text-sm text-ink/80 mb-6">
@@ -130,11 +192,11 @@ export function PracticalServices() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-teal shrink-0" />
-                  <span>Transparent consultation rates in ₹</span>
+                  <span>Transparent <GlossaryTerm termId="consultation-fee">consultation fee</GlossaryTerm> schedule in ₹</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="size-4 text-teal shrink-0" />
-                  <span>Cashless insurance desk assistance (Demo)</span>
+                  <span><GlossaryTerm termId="cashless-claim">Cashless claim</GlossaryTerm> and <GlossaryTerm termId="pre-authorisation">pre-authorisation</GlossaryTerm> assistance (Demo)</span>
                 </div>
               </div>
             </div>
@@ -151,19 +213,20 @@ export function PracticalServices() {
           </Card>
         </div>
 
-        {/* Transparent Pricing Table */}
+        {/* Q1: Fee Guide Table with Common Consultation Types and ₹ Ranges */}
         <div className="mb-16">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-4">
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-maroon">
-                Transparent Pricing Schedule
+                Doctor Consultation Fee Guide
               </h3>
-              <p className="text-xs sm:text-sm text-ink/70 mt-1">
-                Demo prices. Excludes applicable taxes.
+              {/* Mandatory acceptance criteria label */}
+              <p className="text-xs sm:text-sm text-ink/80 font-medium mt-1">
+                Sample fees. Excludes applicable taxes. Confirm with the clinic before visiting.
               </p>
             </div>
             <span className="text-xs text-ink/60 font-medium">
-              *Sample illustrative tariffs across Indian metros
+              *Illustrative ranges across Bengaluru, Mumbai, and Delhi
             </span>
           </div>
 
@@ -171,18 +234,24 @@ export function PracticalServices() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-cream/60 border-b border-ink/10 text-xs sm:text-sm font-bold text-maroon">
-                  <th className="p-4 sm:p-5">Service / Consultation Tier</th>
+                  <th className="p-4 sm:p-5">Consultation Type</th>
                   <th className="p-4 sm:p-5">Category</th>
-                  <th className="p-4 sm:p-5">Estimated Duration</th>
-                  <th className="p-4 sm:p-5">Included Features</th>
-                  <th className="p-4 sm:p-5 text-right">Sample Fee</th>
+                  <th className="p-4 sm:p-5">Typical Duration</th>
+                  <th className="p-4 sm:p-5">What is Included</th>
+                  <th className="p-4 sm:p-5 text-right">Sample Fee Range</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink/10 text-xs sm:text-sm text-ink/85">
-                {samplePricingData.map((item) => (
+                {consultationFeeGuideData.map((item) => (
                   <tr key={item.id} className="hover:bg-cream/20 transition-colors">
                     <td className="p-4 sm:p-5 font-bold text-ink">
-                      {item.name}
+                      {item.termId ? (
+                        <GlossaryTerm termId={item.termId}>
+                          {item.consultationType}
+                        </GlossaryTerm>
+                      ) : (
+                        item.consultationType
+                      )}
                     </td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full bg-cream text-xs font-medium border border-ink/10">
@@ -192,23 +261,55 @@ export function PracticalServices() {
                     <td className="p-4 sm:p-5 text-ink/70">
                       {item.duration}
                     </td>
-                    <td className="p-4 sm:p-5">
-                      <ul className="space-y-1">
-                        {item.features.map((f, i) => (
-                          <li key={i} className="flex items-center gap-1.5 text-xs text-ink/75">
-                            <span className="size-1 rounded-full bg-teal shrink-0" />
-                            <span>{f}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <td className="p-4 sm:p-5 text-ink/80">
+                      {item.includedNotes}
                     </td>
-                    <td className="p-4 sm:p-5 text-right font-extrabold text-maroon text-base sm:text-lg">
-                      {formatINR(item.fee)}
+                    <td className="p-4 sm:p-5 text-right font-extrabold text-maroon text-base sm:text-lg whitespace-nowrap">
+                      {item.feeRange}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* Q4: Plain Language Medical Glossary Bar */}
+        <div className="mb-16 bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-8">
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="size-8 rounded-DEFAULT bg-teal/15 text-teal flex items-center justify-center shrink-0">
+              <BookOpen className="size-4" />
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-maroon">
+              Healthcare Terms in Plain Language
+            </h3>
+          </div>
+          <p className="text-xs sm:text-sm text-ink/75 mb-4 leading-relaxed">
+            Click any term below for a clear, one-sentence plain English explanation without medical jargon.
+          </p>
+
+          <div className="flex flex-wrap gap-2.5">
+            <GlossaryTerm termId="opd" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              OPD
+            </GlossaryTerm>
+            <GlossaryTerm termId="follow-up" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              Follow-up
+            </GlossaryTerm>
+            <GlossaryTerm termId="cashless-claim" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              Cashless claim
+            </GlossaryTerm>
+            <GlossaryTerm termId="pre-authorisation" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              Pre-authorisation
+            </GlossaryTerm>
+            <GlossaryTerm termId="general-physician" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              General physician
+            </GlossaryTerm>
+            <GlossaryTerm termId="specialist" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              Specialist
+            </GlossaryTerm>
+            <GlossaryTerm termId="consultation-fee" className="bg-cream/70 px-3 py-1.5 rounded-md border border-teal/20 text-xs sm:text-sm font-semibold">
+              Consultation fee
+            </GlossaryTerm>
           </div>
         </div>
 

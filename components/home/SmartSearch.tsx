@@ -13,6 +13,11 @@ interface SmartSearchProps {
   selectedLocality: string;
   onCityChange: (c: string) => void;
   onLocalityChange: (l: string) => void;
+  onLocationDetected?: (
+    coords: { latitude: number; longitude: number } | null,
+    isGps: boolean
+  ) => void;
+  isGpsActive?: boolean;
   onSubmit: (e: React.FormEvent) => void;
   className?: string;
 }
@@ -24,6 +29,8 @@ export function SmartSearch({
   selectedLocality,
   onCityChange,
   onLocalityChange,
+  onLocationDetected,
+  isGpsActive,
   onSubmit,
   className = "",
 }: SmartSearchProps) {
@@ -64,6 +71,8 @@ export function SmartSearch({
               selectedLocality={selectedLocality}
               onCityChange={onCityChange}
               onLocalityChange={onLocalityChange}
+              onLocationDetected={onLocationDetected}
+              isGpsActive={isGpsActive}
             />
           </div>
           <div className="lg:col-span-4 flex items-center">

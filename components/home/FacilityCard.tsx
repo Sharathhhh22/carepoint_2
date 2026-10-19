@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   MapPin,
   Clock,
@@ -8,20 +8,23 @@ import {
   Star,
   CheckCircle,
   CalendarCheck,
+  Phone,
+  Navigation,
 } from "lucide-react";
 import { Facility } from "@/lib/data/facilities";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { formatINR } from "@/lib/utils";
+import { formatINR, openNowStatus } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface FacilityCardProps {
-  facility: Facility;
+  facility: Facility & { distanceKm?: number };
+  isGps?: boolean;
   onBook: (facility: Facility) => void;
 }
 
-export function FacilityCard({ facility, onBook }: FacilityCardProps) {
+export function FacilityCard({ facility, isGps = false, onBook }: FacilityCardProps) {
   const { dict } = useLanguage();
 
   const typeVariant =
@@ -31,8 +34,13 @@ export function FacilityCard({ facility, onBook }: FacilityCardProps) {
       ? "teal"
       : "default";
 
+  // Compute live open/closed status in Asia/Kolkata timezone
+  const openStatus = useMemo(() => {
+    return openNowStatus(facility.openingHours);
+  }, [facility.openingHours]);
+
   return (
-    <Card hoverable className="border border-ink/10">
+    <Card hoverable className="border border-ink/10 flex flex-col justify-between">
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
@@ -64,7 +72,7 @@ export function FacilityCard({ facility, onBook }: FacilityCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3.5 text-xs sm:text-sm text-ink/80">
+      <CardContent className="space-y-3.5 text-xs sm:text-sm text-ink/80 flex-1">
         {/* Locality & Address */}
         <div className="space-y-1">
           <div className="flex items-center gap-1.5 font-semibold text-ink">
@@ -78,10 +86,58 @@ export function FacilityCard({ facility, onBook }: FacilityCardProps) {
           </p>
         </div>
 
-        {/* Timings */}
-        <div className="flex items-center gap-1.5 text-xs text-ink/75">
-          <Clock className="size-3.5 text-saffron shrink-0" />
-          <span>{facility.timings}</span>
+        {/* Distance Display (GPS or Locality Fallback) */}
+        {facility.distanceKm !== undefined && (
+          <div className="flex items-center gap-1.5 text-xs">
+            <Navigation className="size-3.5 text-teal shrink-0" aria-hidden="true" />
+            {isGps ? (
+              <span className="font-semibold text-teal">
+                {facility.distanceKm} km away
+              </span>
+            ) : (
+              <span className="text-ink/75">
+                <span className="font-semibold text-ink">
+                  {facility.distanceKm} km away
+                </span>{" "}
+                •{" "}
+                <span className="italic text-ink-subtle">
+                  Distance based on locality (sample)
+                </span>
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Structured Open Status & Timings */}
+        <div className="space-y-1 pt-0.5">
+          <div className="flex items-center gap-1.5 text-xs font-semibold">
+            <Clock
+              className={`size-3.5 shrink-0 ${
+                openStatus.isOpen ? "text-teal" : "text-maroon"
+              }`}
+            />
+            <span className={openStatus.isOpen ? "text-teal" : "text-maroon"}>
+              {openStatus.text}
+            </span>
+          </div>
+          <p className="text-[11px] text-ink/60 pl-5">
+            Regular timings: {facility.timings}
+          </p>
+        </div>
+
+        {/* Phone number with tel: link */}
+        <div className="flex items-center gap-1.5 text-xs pt-0.5">
+          <Phone className="size-3.5 text-teal shrink-0" />
+          <a
+            href={`tel:${facility.phone.replace(/[\s-]/g, "")}`}
+            className="text-teal hover:underline font-medium focus:outline-none focus:ring-1 focus:ring-teal rounded"
+            aria-label={`Call ${facility.name} at ${facility.phone}`}
+          >
+            {facility.phone}
+          </a>
+          <span className="text-[10px] text-ink-subtle bg-cream-muted px-1.5 py-0.2 rounded">
+            Fictional
+          </span>
         </div>
 
         {/* Specialities tags */}
@@ -97,16 +153,23 @@ export function FacilityCard({ facility, onBook }: FacilityCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="pt-3 border-t border-ink/10">
         {/* Fee in ₹ or Fee not listed */}
         <div>
           <span className="text-[11px] block uppercase tracking-wider text-ink/60 font-semibold">
             {dict.common.consultationFee}
           </span>
           {facility.fee !== null ? (
-            <span className="text-base sm:text-lg font-bold text-maroon">
-              {formatINR(facility.fee)}
-            </span>
+            <div>
+              <span className="text-base sm:text-lg font-bold text-maroon">
+                {formatINR(facility.fee)}
+              </span>
+              {facility.feeNote && (
+                <span className="block text-[10px] text-ink-subtle leading-tight max-w-[170px]">
+                  {facility.feeNote}
+                </span>
+              )}
+            </div>
           ) : (
             <span className="text-xs font-medium text-ink/60 italic">
               {dict.common.feeNotListed}
@@ -120,11 +183,12 @@ export function FacilityCard({ facility, onBook }: FacilityCardProps) {
             href={facility.directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2.5 text-ink/70 hover:text-ink hover:bg-cream/60 rounded-DEFAULT border border-ink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron transition-colors"
-            title={`${dict.common.directions} (opens Google Maps search)`}
-            aria-label={`${dict.common.directions} for ${facility.name} (opens external map)`}
+            className="inline-flex items-center gap-1 px-2.5 py-2 text-xs font-semibold text-ink/75 hover:text-ink hover:bg-cream/60 rounded-DEFAULT border border-ink/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron transition-colors"
+            title={`${dict.common.directions} (opens Google Maps)`}
+            aria-label={`${dict.common.directions} for ${facility.name} (opens Google Maps search)`}
           >
-            <ExternalLink className="size-4" />
+            <ExternalLink className="size-3.5 text-teal" />
+            <span className="hidden sm:inline">{dict.common.directions}</span>
           </a>
 
           <Button

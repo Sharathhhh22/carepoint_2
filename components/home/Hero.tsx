@@ -17,6 +17,11 @@ interface HeroProps {
   selectedLocality: string;
   onCityChange: (c: string) => void;
   onLocalityChange: (l: string) => void;
+  onLocationDetected?: (
+    coords: { latitude: number; longitude: number } | null,
+    isGps: boolean
+  ) => void;
+  isGpsActive?: boolean;
   onSearchSubmit: (e: React.FormEvent) => void;
 }
 
@@ -27,6 +32,8 @@ export function Hero({
   selectedLocality,
   onCityChange,
   onLocalityChange,
+  onLocationDetected,
+  isGpsActive,
   onSearchSubmit,
 }: HeroProps) {
   const { dict } = useLanguage();
@@ -68,6 +75,8 @@ export function Hero({
               selectedLocality={selectedLocality}
               onCityChange={onCityChange}
               onLocalityChange={onLocalityChange}
+              onLocationDetected={onLocationDetected}
+              isGpsActive={isGpsActive}
               onSubmit={onSearchSubmit}
             />
 

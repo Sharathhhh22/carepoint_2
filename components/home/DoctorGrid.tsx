@@ -8,7 +8,8 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { BudgetFilter } from "./BudgetFilter";
-import { BudgetRange } from "@/lib/utils";
+import { SortControl } from "./SortControl";
+import { BudgetRange, SortOption } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Search, UserCheck, Languages, RotateCcw, Stethoscope } from "lucide-react";
 
@@ -22,6 +23,8 @@ interface DoctorGridProps {
   onLanguageChange: (lang: string) => void;
   selectedBudget: BudgetRange;
   onBudgetChange: (b: BudgetRange) => void;
+  sortBy?: SortOption;
+  onSortChange?: (sort: SortOption) => void;
   hiddenFacilitiesCount: number;
   onBookDoctor: (doc: Doctor) => void;
   onClearFilters: () => void;
@@ -37,6 +40,8 @@ export function DoctorGrid({
   onLanguageChange,
   selectedBudget,
   onBudgetChange,
+  sortBy = "default",
+  onSortChange,
   hiddenFacilitiesCount,
   onBookDoctor,
   onClearFilters,
@@ -78,13 +83,22 @@ export function DoctorGrid({
             className="mb-0"
           />
 
-          {/* Results count announced via aria-live="polite" */}
-          <div
-            role="status"
-            aria-live="polite"
-            className="text-xs sm:text-sm font-semibold text-teal bg-teal/10 px-3.5 py-1.5 rounded-full self-start md:self-auto border border-teal/20"
-          >
-            {doctors.length} {doctors.length === 1 ? "Doctor" : "Doctors"} Available
+          <div className="flex items-center gap-3 flex-wrap self-start md:self-auto">
+            {onSortChange && (
+              <SortControl
+                id="doctor-sort-control"
+                value={sortBy}
+                onChange={onSortChange}
+              />
+            )}
+            {/* Results count announced via aria-live="polite" */}
+            <div
+              role="status"
+              aria-live="polite"
+              className="text-xs sm:text-sm font-semibold text-teal bg-teal/10 px-3.5 py-1.5 rounded-full border border-teal/20"
+            >
+              {doctors.length} {doctors.length === 1 ? "Doctor" : "Doctors"} Available
+            </div>
           </div>
         </div>
 
@@ -126,11 +140,13 @@ export function DoctorGrid({
                 className="w-full pl-10 pr-8 py-2.5 bg-cream/30 text-ink text-sm font-medium rounded-DEFAULT border border-ink/20 focus:outline-none focus:ring-2 focus:ring-saffron appearance-none cursor-pointer"
               >
                 <option value="all">{dict.common.allLanguages}</option>
-                {languageOptions.filter((l) => l !== "all").map((lang) => (
-                  <option key={lang} value={lang}>
-                    {lang}
-                  </option>
-                ))}
+                {languageOptions
+                  .filter((l) => l !== "all")
+                  .map((lang) => (
+                    <option key={lang} value={lang}>
+                      {lang}
+                    </option>
+                  ))}
               </select>
               <div
                 className="absolute right-3 pointer-events-none text-ink/50 text-xs"

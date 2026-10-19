@@ -6,7 +6,7 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { supportedLocales, SupportedLocale } from "@/lib/i18n/dictionaries";
 
 export function TopBar() {
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, dict } = useLanguage();
 
   return (
     <div className="bg-maroon text-cream text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-white/10 select-none">
@@ -24,7 +24,13 @@ export function TopBar() {
         </div>
 
         {/* Right: Demo Label and Language Selector */}
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-2.5 sm:gap-3 ml-auto flex-wrap">
+          {locale !== "en" && (
+            <span className="px-2 py-0.5 rounded bg-marigold/20 text-marigold text-[10px] sm:text-[11px] font-semibold border border-marigold/30">
+              {dict.common.machineTranslationDemo}
+            </span>
+          )}
+
           <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-white/10 text-[11px] font-medium text-cream/90 uppercase tracking-wider">
             Demo Site
           </span>

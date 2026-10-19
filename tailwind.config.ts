@@ -51,7 +51,16 @@ export default {
         floating: "0 12px 36px rgba(43, 27, 23, 0.16)",
       },
       fontFamily: {
-        sans: ["var(--font-hind)", "system-ui", "-apple-system", "sans-serif"],
+        sans: [
+          "var(--font-hind)",
+          "system-ui",
+          "-apple-system",
+          "'Noto Sans Devanagari'",
+          "'Noto Sans Kannada'",
+          "'Noto Sans Tamil'",
+          "'Noto Sans Telugu'",
+          "sans-serif",
+        ],
       },
     },
   },

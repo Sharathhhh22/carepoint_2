@@ -13,12 +13,15 @@ import { FaqAccordion } from "./FaqAccordion";
 import { RangoliDivider } from "@/components/ui/RangoliDivider";
 import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
 import { AssistantLauncher } from "@/components/assistant/AssistantLauncher";
+import { MobileStickyBar } from "@/components/layout/MobileStickyBar";
 import { facilitiesData, Facility } from "@/lib/data/facilities";
 import { doctorsData, Doctor } from "@/lib/data/doctors";
+import { localityCoordinates } from "@/lib/data/locations";
 import {
   filterFacilities,
   filterDoctors,
   BudgetRange,
+  SortOption,
 } from "@/lib/utils";
 import { useToast } from "@/components/ui/Toast";
 
@@ -35,6 +38,7 @@ export function HomeClient() {
   const initialFemale = searchParams.get("female") === "true";
   const initialLang = searchParams.get("lang") || "all";
   const initialBudget = (searchParams.get("budget") as BudgetRange) || "any";
+  const initialSort = (searchParams.get("sort") as SortOption) || "default";
 
   const [query, setQuery] = useState(initialQuery);
   const [selectedCity, setSelectedCity] = useState(initialCity);
@@ -43,6 +47,14 @@ export function HomeClient() {
   const [femaleDoctorOnly, setFemaleDoctorOnly] = useState(initialFemale);
   const [selectedLanguage, setSelectedLanguage] = useState(initialLang);
   const [selectedBudget, setSelectedBudget] = useState<BudgetRange>(initialBudget);
+  const [sortBy, setSortBy] = useState<SortOption>(initialSort);
+
+  // Geolocation state
+  const [userCoords, setUserCoords] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [isGpsActive, setIsGpsActive] = useState<boolean>(false);
 
   // Modal State
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
@@ -63,6 +75,7 @@ export function HomeClient() {
       params.set("lang", selectedLanguage);
     if (selectedBudget && selectedBudget !== "any")
       params.set("budget", selectedBudget);
+    if (sortBy && sortBy !== "default") params.set("sort", sortBy);
 
     const newQueryString = params.toString();
     const targetUrl = newQueryString ? `/?${newQueryString}` : "/";
@@ -75,12 +88,47 @@ export function HomeClient() {
     femaleDoctorOnly,
     selectedLanguage,
     selectedBudget,
+    sortBy,
     router,
   ]);
 
   useEffect(() => {
     syncFiltersToUrl();
   }, [syncFiltersToUrl]);
+
+  // Handle location detected from LocationSelector
+  const handleLocationDetected = (
+    coords: { latitude: number; longitude: number } | null,
+    isGps: boolean
+  ) => {
+    if (coords && isGps) {
+      setUserCoords(coords);
+      setIsGpsActive(true);
+    } else {
+      setUserCoords(null);
+      setIsGpsActive(false);
+    }
+  };
+
+  // Determine effective coordinates for distance calculation
+  const effectiveCoords = useMemo(() => {
+    if (isGpsActive && userCoords) {
+      return userCoords;
+    }
+
+    // Fallback: use selected locality or selected city reference point
+    if (selectedLocality && selectedLocality !== "all") {
+      const loc = localityCoordinates[selectedLocality];
+      if (loc) return loc;
+    }
+    if (selectedCity && selectedCity !== "all") {
+      const cityLoc = localityCoordinates[selectedCity];
+      if (cityLoc) return cityLoc;
+    }
+
+    // Default to Bengaluru reference
+    return localityCoordinates["Bengaluru"];
+  }, [isGpsActive, userCoords, selectedLocality, selectedCity]);
 
   // Handle SmartSearch submit from Hero: scrolls to #find-doctors
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -100,6 +148,9 @@ export function HomeClient() {
     setFemaleDoctorOnly(false);
     setSelectedLanguage("all");
     setSelectedBudget("any");
+    setSortBy("default");
+    setIsGpsActive(false);
+    setUserCoords(null);
     showToast("Search filters cleared", "info");
     router.replace("/", { scroll: false });
   };
@@ -112,8 +163,18 @@ export function HomeClient() {
       locality: selectedLocality,
       speciality: selectedSpeciality,
       budget: selectedBudget,
+      sortBy,
+      userCoords: effectiveCoords,
     });
-  }, [query, selectedCity, selectedLocality, selectedSpeciality, selectedBudget]);
+  }, [
+    query,
+    selectedCity,
+    selectedLocality,
+    selectedSpeciality,
+    selectedBudget,
+    sortBy,
+    effectiveCoords,
+  ]);
 
   // Calculate hidden facilities count when budget is active
   const hiddenFacilitiesCount = useMemo(() => {
@@ -137,6 +198,7 @@ export function HomeClient() {
       femaleDoctor: femaleDoctorOnly,
       language: selectedLanguage,
       budget: selectedBudget,
+      sortBy,
     });
   }, [
     query,
@@ -145,6 +207,7 @@ export function HomeClient() {
     femaleDoctorOnly,
     selectedLanguage,
     selectedBudget,
+    sortBy,
   ]);
 
   // Open appointment dialog for specific doctor or facility
@@ -160,8 +223,24 @@ export function HomeClient() {
     setIsAppointmentOpen(true);
   };
 
+  // Mobile quick action handlers
+  const handleMobileFindCare = () => {
+    const el = document.getElementById("find-doctors") || document.getElementById("smart-search-input");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      el.focus();
+    }
+  };
+
+  const handleMobileBookDemo = () => {
+    // Open appointment dialog with first available doctor or facility
+    setActiveDoctor(doctorsData[0]);
+    setActiveFacility(null);
+    setIsAppointmentOpen(true);
+  };
+
   return (
-    <>
+    <div className="pb-16 sm:pb-0">
       {/* SECTION 02: Hero & Smart Search */}
       <Hero
         query={query}
@@ -170,6 +249,8 @@ export function HomeClient() {
         selectedLocality={selectedLocality}
         onCityChange={setSelectedCity}
         onLocalityChange={setSelectedLocality}
+        onLocationDetected={handleLocationDetected}
+        isGpsActive={isGpsActive}
         onSearchSubmit={handleSearchSubmit}
       />
 
@@ -186,6 +267,9 @@ export function HomeClient() {
       {/* SECTION 04: Healthcare Discovery (Facilities and Doctors) */}
       <FacilityList
         facilities={filteredFacilities}
+        isGps={isGpsActive}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
         onBookFacility={handleBookFacility}
         onClearFilters={handleClearFilters}
       />
@@ -200,6 +284,8 @@ export function HomeClient() {
         onLanguageChange={setSelectedLanguage}
         selectedBudget={selectedBudget}
         onBudgetChange={setSelectedBudget}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
         hiddenFacilitiesCount={hiddenFacilitiesCount}
         onBookDoctor={handleBookDoctor}
         onClearFilters={handleClearFilters}
@@ -232,6 +318,12 @@ export function HomeClient() {
       <AssistantLauncher
         onApplySpecialityFilter={(spec) => setSelectedSpeciality(spec)}
       />
-    </>
+
+      {/* Q5: Sticky Bottom Bar on Mobile */}
+      <MobileStickyBar
+        onFindCareClick={handleMobileFindCare}
+        onBookClick={handleMobileBookDemo}
+      />
+    </div>
   );
 }

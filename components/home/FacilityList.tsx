@@ -7,17 +7,25 @@ import { FacilityCardSkeleton } from "@/components/ui/Skeleton";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { SortControl } from "./SortControl";
+import { SortOption } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Building2, RotateCcw } from "lucide-react";
 
 interface FacilityListProps {
-  facilities: Facility[];
+  facilities: (Facility & { distanceKm?: number })[];
+  isGps?: boolean;
+  sortBy?: SortOption;
+  onSortChange?: (sort: SortOption) => void;
   onBookFacility: (facility: Facility) => void;
   onClearFilters: () => void;
 }
 
 export function FacilityList({
   facilities,
+  isGps = false,
+  sortBy = "default",
+  onSortChange,
   onBookFacility,
   onClearFilters,
 }: FacilityListProps) {
@@ -48,12 +56,21 @@ export function FacilityList({
             className="mb-0"
           />
 
-          <div
-            role="status"
-            aria-live="polite"
-            className="text-xs sm:text-sm font-semibold text-teal bg-teal/10 px-3.5 py-1.5 rounded-full self-start md:self-auto border border-teal/20"
-          >
-            {facilities.length} {facilities.length === 1 ? "Facility" : "Facilities"} Found
+          <div className="flex items-center gap-3 flex-wrap self-start md:self-auto">
+            {onSortChange && (
+              <SortControl
+                id="facility-sort-control"
+                value={sortBy}
+                onChange={onSortChange}
+              />
+            )}
+            <div
+              role="status"
+              aria-live="polite"
+              className="text-xs sm:text-sm font-semibold text-teal bg-teal/10 px-3.5 py-1.5 rounded-full border border-teal/20"
+            >
+              {facilities.length} {facilities.length === 1 ? "Facility" : "Facilities"} Found
+            </div>
           </div>
         </div>
 
@@ -70,6 +87,7 @@ export function FacilityList({
               <FacilityCard
                 key={facility.id}
                 facility={facility}
+                isGps={isGps}
                 onBook={onBookFacility}
               />
             ))}

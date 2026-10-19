@@ -22,7 +22,7 @@ test.describe("CarePoint E2E Verification Suite", () => {
     await page.goto("/");
     const searchInput = page.locator("#smart-search-input");
     await searchInput.fill("Dermatology");
-    await page.locator('button:has-text("Find Care")').click();
+    await page.locator('form[role="search"] button:has-text("Find Care")').click();
 
     // Verify URL query params sync
     await expect(page).toHaveURL(/\?q=Dermatology/);
@@ -50,6 +50,11 @@ test.describe("CarePoint E2E Verification Suite", () => {
     await langSelect.selectOption("kn");
     await expect(html).toHaveAttribute("lang", "kn");
     await expect(page.locator("h1")).toHaveText("ಆರೋಗ್ಯ ರಕ್ಷಣೆ, ನಿಮ್ಮ ಮನೆಗೆ ಹತ್ತಿರ.");
+
+    // Switch to Telugu
+    await langSelect.selectOption("te");
+    await expect(html).toHaveAttribute("lang", "te");
+    await expect(page.locator("h1")).toHaveText("ఆరోగ్య సంరక్షణ, మీ ఇంటికి సమీపంలో.");
 
     // Switch back to English
     await langSelect.selectOption("en");
@@ -83,11 +88,17 @@ test.describe("CarePoint E2E Verification Suite", () => {
   test("5. Appointment Dialog: open, select slot, fill patient details, confirm demo, close and return focus", async ({ page }) => {
     await page.goto("/");
 
-    const firstBookButton = page.locator('button:has-text("Book (DEMO)")').first();
+    const firstBookButton = page.locator('#find-doctors button:has-text("Book (DEMO)")').first();
     await firstBookButton.click();
 
     const dialog = page.locator("dialog[open]");
     await expect(dialog).toBeVisible();
+
+    // Verify fee is shown at top before time is chosen
+    await expect(dialog.getByText("Consultation Fee (DEMO)")).toBeVisible();
+
+    // Verify Earliest available line
+    await expect(dialog.getByText(/Earliest available:/i)).toBeVisible();
 
     // Step 1: Select an unbooked time slot inside dialog
     const slotRadio = dialog.locator('[role="radio"]:not([aria-disabled="true"])').first();
@@ -109,7 +120,6 @@ test.describe("CarePoint E2E Verification Suite", () => {
   });
 
   test("6. Mobile menu traps focus, closes on Escape, and returns focus to trigger", async ({ page }) => {
-    // Set mobile viewport
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
 
@@ -155,7 +165,7 @@ test.describe("CarePoint E2E Verification Suite", () => {
     for (const vp of viewports) {
       await page.setViewportSize(vp);
       await page.goto("/");
-      await page.waitForTimeout(200);
+      await page.waitForTimeout(150);
 
       const hasHorizontalScroll = await page.evaluate(() => {
         return document.documentElement.scrollWidth > document.documentElement.clientWidth;
@@ -175,5 +185,152 @@ test.describe("CarePoint E2E Verification Suite", () => {
     const response = await page.goto("/doctors/unknown-fake-slug");
     expect(response?.status()).toBe(404);
     await expect(page.locator("h1")).toHaveText("Page Not Found");
+  });
+
+  // ==========================================
+  // PATIENT QUESTIONS ACCEPTANCE CRITERIA TESTS
+  // ==========================================
+
+  test("10. Q1: Fee display on cards, sort by fee, and fee guide table", async ({ page }) => {
+    await page.goto("/");
+
+    // Verify doctor card has fee in INR
+    const doctorFee = page.locator("#find-doctors").getByText(/₹\d+/);
+    await expect(doctorFee.first()).toBeVisible();
+
+    // Verify facility card has fee in INR or 'Fee not listed'
+    const facilityFee = page.locator("#clinics").getByText(/₹\d+|Fee not listed/);
+    await expect(facilityFee.first()).toBeVisible();
+
+    // Verify fee guide table exists with required acceptance text
+    const feeGuideText = page.getByText("Sample fees. Excludes applicable taxes. Confirm with the clinic before visiting.");
+    await expect(feeGuideText.first()).toBeVisible();
+  });
+
+  test("11. Q2: Geolocation granted shows distance vs fallback label when denied", async ({ browser }) => {
+    // Context A: Permission granted
+    const contextGranted = await browser.newContext({
+      permissions: ["geolocation"],
+      geolocation: { latitude: 12.9784, longitude: 77.6408 }, // Indiranagar
+    });
+    const pageGranted = await contextGranted.newPage();
+    await pageGranted.goto("/");
+
+    // Click 'Use my location'
+    const useLocBtn = pageGranted.getByRole("button", { name: "Use my location" });
+    await useLocBtn.click();
+
+    // Card should show distance (e.g. '0 km away' or 'km away')
+    const distanceBadge = pageGranted.locator("#clinics").getByText(/km away/i);
+    await expect(distanceBadge.first()).toBeVisible();
+    await contextGranted.close();
+
+    // Context B: Permission denied
+    const contextDenied = await browser.newContext({
+      permissions: [],
+    });
+    const pageDenied = await contextDenied.newPage();
+    await pageDenied.goto("/");
+
+    // When permission is denied / fallback used: card shows 'Distance based on locality (sample)'
+    const fallbackLabel = pageDenied.locator("#clinics").getByText("Distance based on locality (sample)");
+    await expect(fallbackLabel.first()).toBeVisible();
+    await contextDenied.close();
+  });
+
+  test("12. Q3: Qualifications block with verification badges, council note, and sample reviews with star filter", async ({ page }) => {
+    await page.goto("/doctors/dr-arvind-somayaji");
+
+    // Check qualifications block has 'Sample verification' badges
+    const sampleBadges = page.locator("#main-content").getByText("Sample verification");
+    expect(await sampleBadges.count()).toBeGreaterThanOrEqual(3);
+
+    // Check mandatory medical council register note
+    const councilNote = page.getByText(
+      "In a live listing, qualifications would be checked against the official medical council register. This demo shows sample data only."
+    );
+    await expect(councilNote).toBeVisible();
+
+    // Check 'What’s Included' card
+    await expect(page.getByText("What’s Included in Consultation")).toBeVisible();
+
+    // Check 'Sample reviews (fictional)'
+    await expect(page.getByText("Sample reviews (fictional)")).toBeVisible();
+
+    // Check star filters for reviews (All, 5 stars, 4 stars and below)
+    const starFilter5 = page.getByRole("button", { name: /5 stars/i });
+    await expect(starFilter5).toBeVisible();
+    await starFilter5.click();
+
+    // Filtered reviews displayed
+    const reviews = page.getByText(/Sample illustrative review/i);
+    expect(await reviews.count()).toBeGreaterThanOrEqual(1);
+  });
+
+  test("13. Q4: GlossaryTerm keyboard popover and Telugu language with fallback", async ({ page }) => {
+    await page.goto("/");
+
+    // 1. GlossaryTerm popover test
+    const opdTerm = page.locator("button", { hasText: "OPD" }).first();
+    await expect(opdTerm).toBeVisible();
+    await opdTerm.click();
+
+    // Popover dialog opens
+    const popover = page.locator('span[role="dialog"][aria-label*="glossary"]');
+    await expect(popover).toBeVisible();
+    await expect(popover.getByText("Outpatient visit")).toBeVisible();
+
+    // Dismiss with Escape
+    await page.keyboard.press("Escape");
+    await expect(popover).not.toBeVisible();
+
+    // 2. Language switcher to Telugu
+    const langSelect = page.locator("select[id$='language-select']").first();
+    await langSelect.selectOption("te");
+
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("lang", "te");
+
+    // Verify Telugu headline & machine translation demo badge
+    await expect(page.getByText("యంత్ర సహాయక అనువాదం (డెమో)").first()).toBeVisible();
+    await expect(page.locator("h1")).toHaveText("ఆరోగ్య సంరక్షణ, మీ ఇంటికి సమీపంలో.");
+  });
+
+  test("14. Q5: Booking path from homepage to DEMO success in 4 or fewer clicks", async ({ page }) => {
+    await page.goto("/");
+
+    let clickCount = 0;
+
+    // Click 1: Click "Book (DEMO)" on first doctor card
+    const firstDoctorBook = page.locator('#find-doctors button:has-text("Book (DEMO)")').first();
+    await firstDoctorBook.click();
+    clickCount++;
+
+    const dialog = page.locator("dialog[open]");
+    await expect(dialog).toBeVisible();
+
+    // Click 2: Click an available time slot radio
+    const slotRadio = dialog.locator('[role="radio"]:not([aria-disabled="true"])').first();
+    await slotRadio.click();
+    clickCount++;
+
+    // Click 3: Click "Continue to Details"
+    const continueBtn = dialog.locator('button:has-text("Continue to Details")');
+    await continueBtn.click();
+    clickCount++;
+
+    // Enter patient name (typing does not count towards click count)
+    await dialog.locator("#patientName").fill("Priya Sundaram");
+
+    // Click 4: Click "Confirm Booking (DEMO)"
+    const confirmBtn = dialog.locator('button:has-text("Confirm Booking (DEMO)")');
+    await confirmBtn.click();
+    clickCount++;
+
+    // Verify DEMO success confirmation state
+    await expect(dialog.getByText("Demo only. No appointment was made.")).toBeVisible();
+
+    // Assert that total clicks is 4 or fewer
+    expect(clickCount).toBeLessThanOrEqual(4);
   });
 });
