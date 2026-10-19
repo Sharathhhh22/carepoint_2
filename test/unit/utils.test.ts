@@ -12,7 +12,7 @@ import {
 } from "@/lib/utils";
 import { facilitiesData, OpeningHours } from "@/lib/data/facilities";
 import { doctorsData } from "@/lib/data/doctors";
-import { getGlossaryItem, glossaryData } from "@/lib/data/glossary";
+import { getGlossaryItem } from "@/lib/data/glossary";
 
 describe("lib/utils unit tests", () => {
   describe("formatINR", () => {
