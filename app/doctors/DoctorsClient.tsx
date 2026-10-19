@@ -99,10 +99,9 @@ export function DoctorsClient() {
       <section className="bg-navy text-white py-12 border-b border-border">
         <Container>
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal/20 text-teal-pale text-xs font-semibold mb-4 border border-teal/40">
-              <Stethoscope className="size-3.5" />
-              <span>Verified Doctor Directory</span>
-            </div>
+            <p className="text-xs font-bold text-teal-pale uppercase tracking-wider mb-2">
+              Verified Doctor Directory &bull; India (Demo)
+            </p>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4">
               Find Experienced Doctors
             </h1>

@@ -220,7 +220,7 @@ export function AppointmentDialog({
   const onSubmitPatientForm = () => {
     setStep(3);
     showToast(
-      "Demo appointment confirmed! Demonstration only — no booking was created.",
+      "Demo appointment confirmed! Demonstration only (no booking was created).",
       "success"
     );
   };
@@ -245,7 +245,7 @@ export function AppointmentDialog({
     <dialog
       ref={dialogRef}
       onKeyDown={handleKeyDown}
-      className="m-auto rounded-card bg-white p-0 shadow-floating border border-ink/15 max-w-lg w-full backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      className="m-auto rounded-card bg-white p-0 shadow-floating border border-ink/15 max-w-lg w-full backdrop:bg-black/60"
       aria-labelledby="appointment-dialog-title"
     >
       <div className="p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
@@ -369,7 +369,7 @@ export function AppointmentDialog({
                       className={item.isSunday ? "text-ink/40 bg-gray-100" : ""}
                     >
                       {item.displayLabel}{" "}
-                      {item.isSunday ? "— (Closed on Sundays - DEMO)" : ""}
+                      {item.isSunday ? "(Closed on Sundays - DEMO)" : ""}
                     </option>
                   ))}
                 </select>

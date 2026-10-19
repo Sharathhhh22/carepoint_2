@@ -42,9 +42,9 @@ export function HowCarePointWorks() {
     <section id="how-it-works" className="py-16 bg-white border-b border-border" aria-labelledby="how-it-works-title">
       <Container>
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-bold uppercase tracking-wider text-teal bg-teal-pale px-3 py-1 rounded-full mb-3 inline-block">
-            Simple 5-Step Patient Journey
-          </span>
+          <p className="text-xs font-bold text-teal tracking-wider uppercase mb-2">
+            Patient Journey
+          </p>
           <h2 id="how-it-works-title" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy tracking-tight mb-3">
             How CarePoint Works
           </h2>

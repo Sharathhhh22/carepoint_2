@@ -59,7 +59,7 @@ export function LoginDemoDialog({
     <dialog
       ref={dialogRef}
       onKeyDown={handleKeyDown}
-      className="m-auto rounded-card bg-white p-0 shadow-floating border border-ink/15 max-w-md w-full backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      className="m-auto rounded-card bg-white p-0 shadow-floating border border-ink/15 max-w-md w-full backdrop:bg-black/60"
       aria-labelledby="login-dialog-title"
       aria-describedby="login-dialog-desc"
     >

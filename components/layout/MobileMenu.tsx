@@ -101,7 +101,7 @@ export function MobileMenu({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-navy/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-navy/60 transition-opacity"
         onClick={() => {
           onClose();
           triggerRef.current?.focus();

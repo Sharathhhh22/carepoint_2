@@ -47,11 +47,10 @@ export function Hero({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Heading, Subtext, Search, CTAs (7 cols) */}
           <div className="lg:col-span-7 flex flex-col space-y-6 sm:space-y-8 z-10">
-            {/* Trust badge */}
-            <div className="inline-flex items-center gap-2">
-              <Badge variant="teal" size="md" icon={<ShieldCheck className="size-4" />}>
-                Verified Healthcare Directory • India (Demo)
-              </Badge>
+            {/* Clinical Section Kicker */}
+            <div className="flex items-center gap-2 text-xs font-bold text-teal tracking-wider uppercase">
+              <span className="size-2 rounded-full bg-teal" />
+              <span>Verified Healthcare Directory &bull; India (Demo)</span>
             </div>
 
             {/* Exactly ONE h1 on the page */}
@@ -148,39 +147,11 @@ export function Hero({
                 className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"
                 aria-hidden="true"
               />
-              <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-medium bg-black/50 backdrop-blur-sm p-2.5 rounded-DEFAULT border border-white/20">
-                Sample outpatient consultation in Bengaluru • Verified facility
-              </div>
-            </div>
-
-            {/* Decorative Floating Cards: Hidden below 1024px strictly */}
-            <div
-              aria-hidden="true"
-              className="hidden lg:block absolute -top-4 -left-6 z-20 bg-white p-3.5 rounded-card shadow-floating border border-ink/10 max-w-[210px] animate-in fade-in duration-300"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="size-8 rounded-full bg-teal/15 text-teal flex items-center justify-center shrink-0">
-                  <ShieldCheck className="size-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-ink">Verified Clinics</div>
-                  <div className="text-[11px] text-ink/70">100% Sample Audited</div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="hidden lg:block absolute -bottom-5 -right-4 z-20 bg-white p-3.5 rounded-card shadow-floating border border-ink/10 max-w-[220px] animate-in fade-in duration-300"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="size-8 rounded-full bg-saffron/20 text-ink flex items-center justify-center shrink-0 font-bold text-xs">
-                  ₹
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-ink">Transparent Fees</div>
-                  <div className="text-[11px] text-ink/70">Direct In-Clinic ₹ Rates</div>
-                </div>
+              <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-medium bg-navy/95 p-2.5 rounded shadow-sm border border-white/10">
+                <p className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-teal shrink-0" />
+                  <span>Sample outpatient consultation in Bengaluru &bull; Verified facility</span>
+                </p>
               </div>
             </div>
           </div>

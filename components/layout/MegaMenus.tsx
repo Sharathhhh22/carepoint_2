@@ -158,7 +158,7 @@ export function FindDoctorMegaMenu({ onClose, onOpenBooking }: MegaMenuProps) {
 }
 
 /**
- * 2. Mega Menu: Hospitals & Clinics — with States Details Menu!
+ * 2. Mega Menu: Hospitals & Clinics - with States Details Menu!
  */
 export function HospitalsMegaMenu({ onClose }: SimpleMegaMenuProps) {
   const [activeState, setActiveState] = useState<StateInfo>(statesData[0]);

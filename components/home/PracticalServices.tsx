@@ -115,7 +115,7 @@ export function PracticalServices() {
         {/* Top Cards: Online Consultations & In-Clinic Appointment Booking */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-16">
           {/* Card 1: Online Video Consultations */}
-          <Card hoverable className="border-2 border-teal/20 p-6 sm:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-teal/5">
+          <Card hoverable className="border-2 border-teal/20 p-6 sm:p-8 flex flex-col justify-between bg-white">
             <div>
               <div className="flex items-center justify-between gap-3 mb-4">
                 <div className="size-12 rounded-DEFAULT bg-teal/15 text-teal flex items-center justify-center font-bold">
@@ -163,7 +163,7 @@ export function PracticalServices() {
           </Card>
 
           {/* Card 2: In-Clinic Scheduled Appointment */}
-          <Card hoverable className="border-2 border-saffron/30 p-6 sm:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-saffron/5">
+          <Card hoverable className="border-2 border-saffron/30 p-6 sm:p-8 flex flex-col justify-between bg-white">
             <div>
               <div className="flex items-center justify-between gap-3 mb-4">
                 <div className="size-12 rounded-DEFAULT bg-saffron/20 text-ink flex items-center justify-center font-bold">

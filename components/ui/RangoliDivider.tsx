@@ -6,7 +6,7 @@ export function RangoliDivider({ className = "" }: { className?: string }) {
       aria-hidden="true"
       className={`w-full flex items-center justify-center my-8 sm:my-12 overflow-hidden select-none pointer-events-none opacity-40 ${className}`}
     >
-      <div className="h-px bg-gradient-to-r from-transparent via-maroon/30 to-maroon flex-1 max-w-xs" />
+      <div className="h-px bg-border flex-1 max-w-xs" />
       <svg
         className="mx-3 text-maroon shrink-0 size-6 sm:size-7"
         viewBox="0 0 24 24"
@@ -20,7 +20,7 @@ export function RangoliDivider({ className = "" }: { className?: string }) {
         <path d="M12 22C12 18 15 15 19 15C15 15 12 12 12 8C12 12 9 15 5 15C9 15 12 18 12 22Z" />
         <circle cx="12" cy="12" r="1.5" fill="currentColor" />
       </svg>
-      <div className="h-px bg-gradient-to-l from-transparent via-maroon/30 to-maroon flex-1 max-w-xs" />
+      <div className="h-px bg-border flex-1 max-w-xs" />
     </div>
   );
 }

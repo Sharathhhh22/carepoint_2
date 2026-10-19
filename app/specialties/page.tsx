@@ -50,10 +50,9 @@ export default function SpecialtiesIndexPage() {
       <section className="bg-navy text-white py-12 border-b border-border">
         <Container>
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal/20 text-teal-pale text-xs font-semibold mb-4 border border-teal/40">
-              <Activity className="size-3.5" />
-              <span>Centres of Clinical Excellence</span>
-            </div>
+            <p className="text-xs font-bold text-teal-pale uppercase tracking-wider mb-2">
+              Centres of Clinical Excellence &bull; India (Demo)
+            </p>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4">
               Explore Medical Specialties
             </h1>

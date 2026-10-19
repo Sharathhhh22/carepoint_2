@@ -16,7 +16,7 @@ export function MobileStickyBar({
   return (
     <nav
       aria-label="Mobile quick actions"
-      className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-ink/15 p-2.5 px-3.5 shadow-floating flex items-center justify-between gap-3"
+      className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-ink/15 p-2.5 px-3.5 shadow-floating flex items-center justify-between gap-3"
     >
       <Button
         variant="outline"

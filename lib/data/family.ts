@@ -17,7 +17,7 @@ export const familyCareTabsData: FamilyCareTab[] = [
     label: "Self",
     headline: "Proactive Personal Health & Preventive Care",
     summary:
-      "Maintain peak vitality with routine annual biomarkers, stress management, seasonal immunizations, and timely symptom checks.",
+      "Stay on track with routine annual check-ups, preventive blood pressure monitoring, seasonal vaccines, and timely symptom reviews.",
     recommendedSpecialities: [
       {
         name: "General physician",
@@ -46,7 +46,7 @@ export const familyCareTabsData: FamilyCareTab[] = [
     label: "Parents",
     headline: "Senior Citizen Wellness & Geriatric Support",
     summary:
-      "Compassionate care focused on cardiovascular integrity, bone density preservation, mobility management, and medication reconciliation.",
+      "Practical healthcare for aging parents, including blood pressure monitoring, arthritis check-ups, vision screening, and regular medicine reviews.",
     recommendedSpecialities: [
       {
         name: "Cardiology",
@@ -75,7 +75,7 @@ export const familyCareTabsData: FamilyCareTab[] = [
     label: "Children",
     headline: "Paediatric Milestones & Childhood Health",
     summary:
-      "Ensure developmental benchmarks, timely universal immunization, seasonal respiratory resilience, and pediatric dental hygiene.",
+      "Help your child grow well with timely vaccinations, routine growth checks, eye examinations, and cavity prevention.",
     recommendedSpecialities: [
       {
         name: "Paediatrics",
@@ -104,7 +104,7 @@ export const familyCareTabsData: FamilyCareTab[] = [
     label: "Spouse",
     headline: "Partner Wellness & Preventive Screenings",
     summary:
-      "Prioritize proactive reproductive wellness, cardiovascular screenings, stress relief, and customized nutritional balance.",
+      "Keep up with regular preventive screenings, blood work, heart wellness, and healthy daily habits.",
     recommendedSpecialities: [
       {
         name: "Gynaecology",
