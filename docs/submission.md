@@ -26,8 +26,9 @@ Zero backend or external database dependencies exist; all content is driven by t
 - **Motion & Micro-interactions:** Framer Motion, strictly respecting OS `prefers-reduced-motion` settings.
 - **Form Architecture & Validation:** `react-hook-form` paired with `zod` schemas for appointment booking and newsletter subscriptions.
 - **Testing Suites:**
-  - **Vitest:** 26 comprehensive unit tests covering currency formatting (`formatINR`), facility filters, doctor filters, budget ranges, assistant triage keyword rules, and Zod schemas.
-  - **Playwright:** End-to-end user journeys (Search, Filter cascading, Multilingual switching, Modal focus trapping, Time slot selection, Escape handling, and Responsive reflow).
+  - **Vitest:** 26 comprehensive unit tests covering currency formatting (`formatINR`), facility filters, doctor filters, budget ranges, assistant triage keyword rules, and Zod schemas (100% pass in 1.5s).
+  - **Playwright:** 22 automated end-to-end tests across Chromium and Mobile Chrome viewports covering Homepage rendering, Search -> Results flow, Multilingual switching, Budget filtering, Appointment dialog modal (focus trapping, slot selection, demo confirmation, Escape handling), Mobile menu focus traps, Assistant panel launcher, horizontal scroll across viewports, and Doctor profile SSG pages + custom 404 (22/22 passed in 27.3s).
+  - **Visual Artifacts:** Captured full-page high-resolution screenshots in `public/screenshots/` (`desktop-home.png`, `desktop-appointment.png`, `mobile-home.png`, `mobile-appointment.png`).
 
 ---
 
