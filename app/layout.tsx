@@ -85,14 +85,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={hind.variable}>
+    <html lang="en" className={hind.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-sans min-h-screen flex flex-col bg-cream text-ink">
+      <body className="font-sans min-h-screen flex flex-col bg-cream text-ink" suppressHydrationWarning>
         <LanguageProvider>
           <ToastProvider>
             <SkipLink />
