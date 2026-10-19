@@ -174,9 +174,11 @@ export type SortOption = "default" | "fee-asc" | "fee-desc" | "nearest";
 
 export interface FacilityFilterOptions {
   query?: string;
+  state?: string;
   city?: string;
   locality?: string;
   speciality?: string;
+  type?: string;
   budget?: BudgetRange;
   sortBy?: SortOption;
   userCoords?: { latitude: number; longitude: number } | null;
@@ -184,8 +186,10 @@ export interface FacilityFilterOptions {
 
 export interface DoctorFilterOptions {
   query?: string;
+  state?: string;
   city?: string;
   specialty?: string;
+  facilityId?: string;
   femaleDoctor?: boolean;
   language?: string;
   budget?: BudgetRange;
@@ -248,9 +252,11 @@ export function filterFacilities(
 ): (Facility & { distanceKm?: number })[] {
   const {
     query,
+    state,
     city,
     locality,
     speciality,
+    type,
     budget = "any",
     sortBy = "default",
     userCoords,
@@ -259,6 +265,16 @@ export function filterFacilities(
 
   // 1. Filter
   const filtered = facilities.filter((facility) => {
+    // State match
+    if (state && state !== "all" && facility.state && facility.state.toLowerCase() !== state.toLowerCase()) {
+      return false;
+    }
+
+    // Type match
+    if (type && type !== "all" && facility.type.toLowerCase() !== type.toLowerCase()) {
+      return false;
+    }
+
     // City match
     if (city && city !== "all" && facility.city.toLowerCase() !== city.toLowerCase()) {
       return false;
@@ -342,8 +358,10 @@ export function filterDoctors(
 ): Doctor[] {
   const {
     query,
+    state,
     city,
     specialty,
+    facilityId,
     femaleDoctor,
     language,
     budget = "any",
@@ -353,6 +371,27 @@ export function filterDoctors(
 
   // 1. Filter
   const filtered = doctors.filter((doc) => {
+    // State match
+    if (state && state !== "all") {
+      const docState =
+        doc.state ||
+        (doc.city === "Bengaluru"
+          ? "Karnataka"
+          : doc.city === "Mumbai"
+          ? "Maharashtra"
+          : doc.city === "New Delhi"
+          ? "Delhi NCR"
+          : "");
+      if (docState.toLowerCase() !== state.toLowerCase()) {
+        return false;
+      }
+    }
+
+    // Facility match
+    if (facilityId && facilityId !== "all" && doc.facilityId !== facilityId) {
+      return false;
+    }
+
     // City match
     if (city && city !== "all" && doc.city.toLowerCase() !== city.toLowerCase()) {
       return false;

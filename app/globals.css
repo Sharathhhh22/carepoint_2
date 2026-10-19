@@ -3,27 +3,43 @@
 @tailwind utilities;
 
 :root {
-  /* Design Tokens as specified in Phase 1 */
-  --saffron: #E8891C;
+  /* Phase 2: CarePoint Healthcare Design System (Narayana Health Inspired) */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F3F7F8;
+  --teal-primary: #087E8B;
+  --navy-headings: #123047;
+  --teal-pale: #E7F4F3;
+  --text-primary: #243746;
+  --text-secondary: #647480;
+  --border-color: #DDE5E9;
+  --success: #18794E;
+  --warning: #A15C00;
+  --error: #B42318;
+  --emergency: #B42318;
+
+  /* Theme tokens & Aliases */
+  --saffron: var(--teal-primary);
   --marigold: #F2B84B;
-  --maroon: #6B1E2E;
-  --teal: #0F6E6E;
-  --cream: #FFF8EC;
-  --ink: #2B1B17;
+  --maroon: var(--navy-headings);
+  --teal: var(--teal-primary);
+  --cream: var(--bg-primary);
+  --ink: var(--text-primary);
 
-  --radius: 1rem;
-  --radius-lg: 1.5rem;
+  --radius: 0.75rem; /* 12px for standard cards */
+  --radius-sm: 0.5rem; /* 8px for controls */
+  --radius-lg: 1rem;
 
-  --shadow-card: 0 10px 30px -5px rgba(43, 27, 23, 0.08), 0 4px 10px -2px rgba(43, 27, 23, 0.04);
-  --shadow-button: 0 4px 14px 0 rgba(232, 137, 28, 0.35);
+  --shadow-card: 0 4px 20px -2px rgba(18, 48, 71, 0.06), 0 2px 6px -1px rgba(18, 48, 71, 0.04);
+  --shadow-button: 0 4px 14px 0 rgba(8, 126, 139, 0.28);
+  --shadow-dropdown: 0 16px 36px -4px rgba(18, 48, 71, 0.12);
 
-  --background: var(--cream);
-  --foreground: var(--ink);
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
 }
 
 @layer base {
   * {
-    border-color: rgba(43, 27, 23, 0.12);
+    border-color: var(--border-color);
   }
 
   html {
@@ -47,8 +63,8 @@
   }
 
   body {
-    background-color: var(--cream);
-    color: var(--ink);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -58,12 +74,12 @@
 
   /* Universal focus visible rings for WCAG 2.2 AA accessibility */
   :focus-visible {
-    outline: 2px solid var(--saffron);
+    outline: 2px solid var(--teal-primary);
     outline-offset: 2px;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: var(--maroon);
+    color: var(--navy-headings);
     font-weight: 700;
     line-height: 1.25;
   }

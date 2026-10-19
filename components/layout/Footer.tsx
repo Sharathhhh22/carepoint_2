@@ -85,7 +85,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-cream/80">
               <li>
                 <Link
-                  href="#find-doctors"
+                  href="/doctors"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
                   Find Doctors
@@ -93,23 +93,23 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#clinics"
+                  href="/hospitals"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  Clinics & Hospitals
+                  Hospitals & Clinics
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#lab-tests"
+                  href="/specialties"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  Diagnostic Tests
+                  Medical Specialties
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#services"
+                  href="/#services"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
                   Transparent Pricing
@@ -117,18 +117,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#family-care"
+                  href="/#schemes"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  Family Care
+                  Cashless Schemes (Demo)
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#faq"
+                  href="/#faqs"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  FAQs
+                  Patient FAQs
                 </Link>
               </li>
             </ul>

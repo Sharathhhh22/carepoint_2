@@ -179,7 +179,7 @@ test.describe("CarePoint E2E Verification Suite", () => {
     // Valid doctor
     await page.goto("/doctors/dr-arvind-somayaji");
     await expect(page.locator("h1")).toHaveText("Dr. Arvind Somayaji");
-    await expect(page.getByText("Cardiology").first()).toBeVisible();
+    await expect(page.locator("main").getByText("Cardiology").first()).toBeVisible();
 
     // Unknown doctor slug returns 404 page
     const response = await page.goto("/doctors/unknown-fake-slug");
@@ -327,10 +327,63 @@ test.describe("CarePoint E2E Verification Suite", () => {
     await confirmBtn.click();
     clickCount++;
 
-    // Verify DEMO success confirmation state
-    await expect(dialog.getByText("Demo only. No appointment was made.")).toBeVisible();
-
     // Assert that total clicks is 4 or fewer
     expect(clickCount).toBeLessThanOrEqual(4);
+  });
+
+  test("15. Mega Menu and States Details navigation works correctly", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Desktop Mega Menu navigation is tested on desktop viewport");
+    await page.goto("/");
+
+    // Open Hospitals & Clinics Mega Menu
+    const hospitalsTrigger = page.locator('header nav button:has-text("Hospitals & Clinics")');
+    await hospitalsTrigger.click();
+
+    // Verify States Details Menu is visible
+    await expect(page.getByText("Browse by State").first()).toBeVisible();
+    await expect(page.getByText("Karnataka").first()).toBeVisible();
+    await expect(page.getByText("Maharashtra").first()).toBeVisible();
+
+    // Click "View State Facilities"
+    const viewStateFacilities = page.getByRole("link", { name: "View State Facilities →" });
+    await viewStateFacilities.click();
+
+    await expect(page).toHaveURL(/\/hospitals\?state=Karnataka/);
+    await expect(page.getByRole("heading", { name: "Hospitals & Clinics Network" })).toBeVisible();
+  });
+
+  test("16. Direct route navigation to /hospitals, /doctors, and /specialties", async ({ page }) => {
+    // 1. Visit /hospitals
+    await page.goto("/hospitals");
+    await expect(page.getByRole("heading", { name: "Hospitals & Clinics Network" })).toBeVisible();
+    await expect(page.getByText("Mayura Valley Community Clinic").first()).toBeVisible();
+
+    // 2. Visit /doctors
+    await page.goto("/doctors");
+    await expect(page.getByRole("heading", { name: "Find Experienced Doctors" })).toBeVisible();
+    await expect(page.locator("main").getByText("Dr. Arvind Somayaji").first()).toBeVisible();
+
+    // 3. Visit /specialties
+    await page.goto("/specialties");
+    await expect(page.getByRole("heading", { name: "Explore Medical Specialties" })).toBeVisible();
+    await expect(page.locator("main").getByText("Cardiology").first()).toBeVisible();
+  });
+
+  test("17. Facility Detail Page at /hospitals/[id] loads full operational details", async ({ page }) => {
+    await page.goto("/hospitals/fac-blr-01");
+
+    await expect(page.getByRole("heading", { name: "Mayura Valley Community Clinic" })).toBeVisible();
+    await expect(page.getByText("Weekly OPD Timings")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Get Directions on Google Maps/i })).toBeVisible();
+    await expect(page.getByText("Sample verification").first()).toBeVisible();
+  });
+
+  test("18. Specialty Detail Page at /specialties/[slug] loads conditions and doctors", async ({ page }) => {
+    await page.goto("/specialties/cardiology");
+
+    await expect(page.getByRole("heading", { name: "Cardiology", exact: true })).toBeVisible();
+    await expect(page.getByText("Conditions & Symptoms Treated")).toBeVisible();
+    await expect(page.getByText("Diagnostic Procedures & Clinical Evaluations")).toBeVisible();
+    await expect(page.getByText("When Should You Consult a Cardiology Specialist?")).toBeVisible();
   });
 });

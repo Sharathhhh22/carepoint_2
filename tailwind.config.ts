@@ -10,10 +10,30 @@ export default {
   theme: {
     extend: {
       colors: {
+        healthcare: {
+          teal: "#087E8B",
+          tealHover: "#066772",
+          tealPale: "#E7F4F3",
+          navy: "#123047",
+          navyLight: "#1C4566",
+          bgPrimary: "#FFFFFF",
+          bgSecondary: "#F3F7F8",
+          textPrimary: "#243746",
+          textSecondary: "#647480",
+          border: "#DDE5E9",
+          success: "#18794E",
+          warning: "#A15C00",
+          error: "#B42318",
+          emergency: "#B42318",
+        },
+        navy: {
+          DEFAULT: "var(--navy-headings)",
+          light: "#1C4566",
+        },
         saffron: {
           DEFAULT: "var(--saffron)",
-          hover: "#D07412",
-          light: "#FDF4E7",
+          hover: "#066772",
+          light: "#E7F4F3",
         },
         marigold: {
           DEFAULT: "var(--marigold)",
@@ -21,26 +41,27 @@ export default {
         },
         maroon: {
           DEFAULT: "var(--maroon)",
-          hover: "#551623",
-          light: "#F9EEF0",
+          hover: "#0C2335",
+          light: "#F0F5F8",
         },
         teal: {
           DEFAULT: "var(--teal)",
-          hover: "#0B5555",
-          light: "#E7F3F3",
+          hover: "#066772",
+          light: "var(--teal-pale)",
         },
         cream: {
           DEFAULT: "var(--cream)",
           card: "#FFFFFF",
-          muted: "#FAF2E4",
+          muted: "var(--bg-secondary)",
         },
         ink: {
           DEFAULT: "var(--ink)",
-          muted: "#60504B",
-          subtle: "#8A7974",
+          muted: "var(--text-secondary)",
+          subtle: "#8A9AA5",
         },
       },
       borderRadius: {
+        sm: "var(--radius-sm)",
         DEFAULT: "var(--radius)",
         lg: "var(--radius-lg)",
         card: "var(--radius)",
@@ -48,7 +69,8 @@ export default {
       boxShadow: {
         card: "var(--shadow-card)",
         button: "var(--shadow-button)",
-        floating: "0 12px 36px rgba(43, 27, 23, 0.16)",
+        dropdown: "var(--shadow-dropdown)",
+        floating: "0 12px 36px rgba(18, 48, 71, 0.12)",
       },
       fontFamily: {
         sans: [

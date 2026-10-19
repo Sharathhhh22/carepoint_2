@@ -1,15 +1,26 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { X, Lock, Stethoscope, Building2, FlaskConical, Activity, PhoneCall } from "lucide-react";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import {
+  X,
+  Lock,
+  Stethoscope,
+  Building2,
+  Activity,
+  PhoneCall,
+  Calendar,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { statesData } from "@/lib/data/locations";
+import { specialitiesData } from "@/lib/data/specialities";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenLogin: () => void;
+  onOpenBooking: () => void;
   triggerRef: React.RefObject<HTMLButtonElement | null>;
 }
 
@@ -17,10 +28,13 @@ export function MobileMenu({
   isOpen,
   onClose,
   onOpenLogin,
+  onOpenBooking,
   triggerRef,
 }: MobileMenuProps) {
-  const { dict } = useLanguage();
   const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const [isStatesOpen, setIsStatesOpen] = useState(false);
+  const [isSpecialtiesOpen, setIsSpecialtiesOpen] = useState(false);
 
   // Focus trap and Escape key listener
   useEffect(() => {
@@ -29,7 +43,6 @@ export function MobileMenu({
     const menu = menuRef.current;
     if (!menu) return;
 
-    // Focus first interactive element in menu
     const focusableElements = menu.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
@@ -64,7 +77,6 @@ export function MobileMenu({
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    // Prevent background scroll when mobile menu is active
     document.body.style.overflow = "hidden";
 
     return () => {
@@ -89,7 +101,7 @@ export function MobileMenu({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-ink/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-navy/60 backdrop-blur-sm transition-opacity"
         onClick={() => {
           onClose();
           triggerRef.current?.focus();
@@ -100,16 +112,19 @@ export function MobileMenu({
       {/* Drawer */}
       <div
         ref={menuRef}
-        className="fixed inset-y-0 right-0 max-w-xs w-full bg-cream shadow-floating p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200"
+        className="fixed inset-y-0 right-0 max-w-sm w-full bg-white shadow-floating p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200"
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-ink/10">
-            <div className="flex items-center gap-2">
-              <div className="size-8 rounded-DEFAULT bg-saffron text-ink font-bold flex items-center justify-center">
+          <div className="flex items-center justify-between pb-5 border-b border-border">
+            <div className="flex items-center gap-2.5">
+              <div className="size-9 rounded-lg bg-teal text-white font-bold flex items-center justify-center text-sm shadow-sm">
                 CP
               </div>
-              <span className="font-bold text-lg text-maroon">CarePoint</span>
+              <div className="flex flex-col">
+                <span className="font-bold text-lg text-navy leading-none">CarePoint</span>
+                <span className="text-[10px] text-teal font-semibold mt-0.5">Healthcare India</span>
+              </div>
             </div>
             <button
               onClick={() => {
@@ -117,54 +132,166 @@ export function MobileMenu({
                 triggerRef.current?.focus();
               }}
               aria-label="Close navigation menu"
-              className="p-2 text-ink/60 hover:text-ink hover:bg-black/5 rounded-DEFAULT focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+              className="p-2 text-text-secondary hover:text-navy hover:bg-bg-secondary rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
             >
-              <X className="size-6" />
+              <X className="size-5" />
             </button>
           </div>
 
+          {/* Primary Action Button */}
+          <div className="mt-5">
+            <Button
+              fullWidth
+              size="md"
+              className="bg-teal hover:bg-teal-hover text-white font-bold shadow-button"
+              onClick={() => {
+                onClose();
+                onOpenBooking();
+              }}
+              leftIcon={<Calendar className="size-4" />}
+            >
+              Book Appointment (DEMO)
+            </Button>
+          </div>
+
           {/* Navigation links */}
-          <nav className="mt-6 flex flex-col space-y-2" aria-label="Mobile Navigation">
+          <nav className="mt-6 flex flex-col space-y-1.5" aria-label="Mobile Navigation">
             <Link
-              href="#find-doctors"
+              href="/"
               onClick={handleLinkClick}
-              className="flex items-center gap-3 px-3 py-3 rounded-DEFAULT text-base font-semibold text-ink hover:bg-saffron/15 hover:text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+              className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
             >
-              <Stethoscope className="size-5 text-teal shrink-0" />
-              <span>{dict.nav.findDoctors}</span>
+              Home
             </Link>
 
             <Link
-              href="#clinics"
+              href="/doctors"
               onClick={handleLinkClick}
-              className="flex items-center gap-3 px-3 py-3 rounded-DEFAULT text-base font-semibold text-ink hover:bg-saffron/15 hover:text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
             >
-              <Building2 className="size-5 text-teal shrink-0" />
-              <span>{dict.nav.clinics}</span>
+              <Stethoscope className="size-4 text-teal shrink-0" />
+              <span>Find a Doctor</span>
+            </Link>
+
+            {/* Hospitals & Clinics with States Explorer Toggle */}
+            <div className="rounded-md bg-bg-secondary/60 border border-border/60 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2.5">
+                <Link
+                  href="/hospitals"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 text-sm font-semibold text-navy hover:text-teal"
+                >
+                  <Building2 className="size-4 text-teal shrink-0" />
+                  <span>Hospitals & Clinics</span>
+                </Link>
+                <button
+                  onClick={() => setIsStatesOpen(!isStatesOpen)}
+                  className="p-1 text-text-secondary hover:text-teal"
+                  aria-label="Toggle States Menu"
+                >
+                  <ChevronDown
+                    className={`size-4 transition-transform duration-200 ${
+                      isStatesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Collapsible States Details Menu */}
+              {isStatesOpen && (
+                <div className="px-4 pb-3 pt-1 space-y-1.5 border-t border-border/60 bg-white">
+                  <span className="text-[11px] font-bold text-text-secondary uppercase tracking-wider block mb-1">
+                    Browse By State:
+                  </span>
+                  <div className="grid grid-cols-2 gap-1.5 text-xs">
+                    {statesData.map((st) => (
+                      <Link
+                        key={st.id}
+                        href={`/hospitals?state=${encodeURIComponent(st.name)}`}
+                        onClick={handleLinkClick}
+                        className="p-1.5 rounded hover:bg-teal-pale text-text-primary hover:text-navy flex items-center justify-between"
+                      >
+                        <span className="truncate">{st.name}</span>
+                        <span className="text-[10px] text-teal font-semibold">
+                          {st.hospitalCount + st.clinicCount}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Specialties with Toggle */}
+            <div className="rounded-md bg-bg-secondary/60 border border-border/60 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2.5">
+                <Link
+                  href="/specialties"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 text-sm font-semibold text-navy hover:text-teal"
+                >
+                  <Activity className="size-4 text-teal shrink-0" />
+                  <span>Medical Specialties</span>
+                </Link>
+                <button
+                  onClick={() => setIsSpecialtiesOpen(!isSpecialtiesOpen)}
+                  className="p-1 text-text-secondary hover:text-teal"
+                  aria-label="Toggle Specialties Menu"
+                >
+                  <ChevronDown
+                    className={`size-4 transition-transform duration-200 ${
+                      isSpecialtiesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {isSpecialtiesOpen && (
+                <div className="px-4 pb-3 pt-1 space-y-1 border-t border-border/60 bg-white">
+                  <div className="grid grid-cols-2 gap-1 text-xs">
+                    {specialitiesData.map((spec) => (
+                      <Link
+                        key={spec.id}
+                        href={`/specialties/${spec.slug}`}
+                        onClick={handleLinkClick}
+                        className="p-1.5 rounded hover:bg-teal-pale text-text-primary hover:text-navy truncate"
+                      >
+                        {spec.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/#services"
+              onClick={handleLinkClick}
+              className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
+            >
+              Practical Services & Fee Guide
             </Link>
 
             <Link
-              href="#lab-tests"
+              href="/#faqs"
               onClick={handleLinkClick}
-              className="flex items-center gap-3 px-3 py-3 rounded-DEFAULT text-base font-semibold text-ink hover:bg-saffron/15 hover:text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+              className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
             >
-              <FlaskConical className="size-5 text-teal shrink-0" />
-              <span>{dict.nav.labTests}</span>
+              Patient FAQs
             </Link>
 
             <Link
-              href="#services"
+              href="/accessibility"
               onClick={handleLinkClick}
-              className="flex items-center gap-3 px-3 py-3 rounded-DEFAULT text-base font-semibold text-ink hover:bg-saffron/15 hover:text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+              className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
             >
-              <Activity className="size-5 text-teal shrink-0" />
-              <span>{dict.nav.services}</span>
+              Accessibility Statement
             </Link>
           </nav>
         </div>
 
         {/* Bottom actions */}
-        <div className="pt-6 border-t border-ink/10 space-y-3">
+        <div className="pt-5 border-t border-border space-y-2.5">
           <Button
             variant="outline"
             fullWidth
@@ -172,17 +299,17 @@ export function MobileMenu({
               onClose();
               onOpenLogin();
             }}
-            leftIcon={<Lock className="size-5" />}
+            leftIcon={<Lock className="size-4 text-teal" />}
           >
-            {dict.nav.loginDemo}
+            Sign In (DEMO)
           </Button>
 
           <a
             href="tel:+915550192831"
-            className="flex items-center justify-center gap-2 py-3 px-4 bg-teal text-white rounded-DEFAULT font-semibold text-sm hover:bg-teal-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 bg-navy text-white rounded-md font-semibold text-xs hover:bg-navy/90 transition-colors"
           >
-            <PhoneCall className="size-4" />
-            <span>Call Helpline (Demo)</span>
+            <PhoneCall className="size-4 text-teal-pale" />
+            <span>24/7 Helpline (+91 555 019 2831)</span>
           </a>
         </div>
       </div>

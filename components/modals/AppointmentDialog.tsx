@@ -237,6 +237,10 @@ export function AppointmentDialog({
     ? doctor.nextAvailable.replace(/\s*\(Demo\)/i, "")
     : "Tomorrow, 09:30 AM";
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <dialog
       ref={dialogRef}

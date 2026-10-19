@@ -88,6 +88,38 @@ export default function RootLayout({
     <html lang="en" className={hind.variable} suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof window === 'undefined') return;
+                function shouldIgnore(msg, source, stack) {
+                  var str = (msg || '') + ' ' + (source || '') + ' ' + (stack || '');
+                  return str.indexOf('chrome-extension://') !== -1 ||
+                         str.indexOf('chrome: call method') !== -1 ||
+                         str.indexOf('Window message') !== -1 ||
+                         str.indexOf('crxemulator') !== -1 ||
+                         str.indexOf('bekkpoinfafbjglppgdobfdeckghdhlo') !== -1;
+                }
+                window.addEventListener('error', function(e) {
+                  if (shouldIgnore(e.message, e.filename, e.error && e.error.stack)) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                  }
+                }, true);
+                window.addEventListener('unhandledrejection', function(e) {
+                  var reason = e.reason;
+                  var msg = reason ? (reason.message || String(reason)) : '';
+                  var stack = reason ? (reason.stack || '') : '';
+                  if (shouldIgnore(msg, '', stack)) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                  }
+                }, true);
+              })();
+            `,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />

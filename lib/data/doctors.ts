@@ -21,6 +21,7 @@ export interface Doctor {
   experienceYears: number;
   languages: string[];
   city: string;
+  state?: string;
   fee: number;
   nextAvailable: string; // Labelled sample
   femaleDoctor: boolean;

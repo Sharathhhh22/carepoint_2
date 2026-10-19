@@ -10,6 +10,8 @@ import { PracticalServices } from "./PracticalServices";
 import { SchemeCards } from "./SchemeCards";
 import { FamilyCare } from "./FamilyCare";
 import { FaqAccordion } from "./FaqAccordion";
+import { QuickAccessServices } from "./QuickAccessServices";
+import { HowCarePointWorks } from "./HowCarePointWorks";
 import { RangoliDivider } from "@/components/ui/RangoliDivider";
 import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
 import { AssistantLauncher } from "@/components/assistant/AssistantLauncher";
@@ -254,6 +256,9 @@ export function HomeClient() {
         onSearchSubmit={handleSearchSubmit}
       />
 
+      {/* SECTION: Quick-Access Services Row */}
+      <QuickAccessServices onOpenBooking={handleMobileBookDemo} />
+
       <RangoliDivider />
 
       {/* SECTION 03: Specialities */}
@@ -290,6 +295,11 @@ export function HomeClient() {
         onBookDoctor={handleBookDoctor}
         onClearFilters={handleClearFilters}
       />
+
+      <RangoliDivider />
+
+      {/* SECTION: How CarePoint Works */}
+      <HowCarePointWorks />
 
       <RangoliDivider />
 

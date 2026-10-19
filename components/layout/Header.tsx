@@ -2,22 +2,65 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, Lock, Globe } from "lucide-react";
+import {
+  Menu,
+  Lock,
+  Calendar,
+  ChevronDown,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
-import { supportedLocales, SupportedLocale } from "@/lib/i18n/dictionaries";
 import { MobileMenu } from "./MobileMenu";
 import { LoginDemoDialog } from "@/components/modals/LoginDemoDialog";
+import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
+import { doctorsData } from "@/lib/data/doctors";
+import {
+  FindDoctorMegaMenu,
+  HospitalsMegaMenu,
+  SpecialtiesMegaMenu,
+  ServicesMegaMenu,
+  AboutMegaMenu,
+} from "./MegaMenus";
+
+type ActiveMenu = "doctors" | "hospitals" | "specialties" | "services" | "about" | null;
 
 export function Header() {
-  const { locale, setLocale, dict } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<ActiveMenu>(null);
+
+  // Dialog states
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
   const loginTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  // Close dropdown on click outside or Escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        navContainerRef.current &&
+        !navContainerRef.current.contains(event.target as Node)
+      ) {
+        setActiveMenu(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   // Sticky header with blur after 16px of scroll
   useEffect(() => {
@@ -33,26 +76,31 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleMenu = (menu: ActiveMenu) => {
+    setActiveMenu((prev) => (prev === menu ? null : menu));
+  };
+
   return (
     <>
       <header
         className={`sticky top-0 z-40 w-full transition-all duration-200 ${
           isScrolled
-            ? "bg-cream/95 backdrop-blur-md shadow-card border-b border-ink/10 py-3"
-            : "bg-cream py-4 border-b border-ink/5"
+            ? "bg-white/95 backdrop-blur-md shadow-card border-b border-border py-2.5"
+            : "bg-white py-3.5 border-b border-border"
         }`}
       >
         <Container>
-          <div className="flex items-center justify-between gap-4">
-            {/* Logo mark and wordmark */}
+          <div className="flex items-center justify-between gap-4" ref={navContainerRef}>
+            {/* Logo mark and wordmark (Narayana Health inspired, distinctive CarePoint branding) */}
             <Link
               href="/"
-              className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded-DEFAULT p-1"
+              onClick={() => setActiveMenu(null)}
+              className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal rounded p-1 shrink-0"
               aria-label="CarePoint - Return to Homepage"
             >
-              <div className="size-10 sm:size-11 rounded-DEFAULT bg-saffron text-ink font-bold flex items-center justify-center shadow-sm group-hover:bg-saffron-hover transition-colors">
+              <div className="size-10 sm:size-11 rounded-lg bg-teal text-white font-bold flex items-center justify-center shadow-sm group-hover:bg-teal-hover transition-colors">
                 <svg
-                  className="size-6 text-ink"
+                  className="size-6 text-white"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -66,78 +114,198 @@ export function Header() {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-bold tracking-tight text-maroon group-hover:text-maroon-hover transition-colors">
+                <span className="text-xl sm:text-2xl font-bold tracking-tight text-navy group-hover:text-teal transition-colors">
                   CarePoint
                 </span>
-                <span className="text-[10px] text-teal font-semibold tracking-wider uppercase -mt-1 hidden sm:block">
-                  Verified Care • India
+                <span className="text-[10px] text-teal font-bold tracking-wider uppercase -mt-1 hidden xl:block">
+                  Verified Hospitals & Doctors
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation with Mega Menus */}
             <nav
-              className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-semibold text-ink"
+              className="hidden lg:flex items-center gap-0.5 xl:gap-2 text-xs xl:text-sm font-semibold text-text-primary"
               aria-label="Primary Navigation"
             >
               <Link
-                href="#find-doctors"
-                className="hover:text-maroon transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
+                href="/"
+                onClick={() => setActiveMenu(null)}
+                className="px-2 xl:px-3 py-2 rounded-md hover:text-teal hover:bg-bg-secondary transition-colors"
               >
-                {dict.nav.findDoctors}
+                Home
               </Link>
-              <Link
-                href="#clinics"
-                className="hover:text-maroon transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
-              >
-                {dict.nav.clinics}
-              </Link>
-              <Link
-                href="#lab-tests"
-                className="hover:text-maroon transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
-              >
-                {dict.nav.labTests}
-              </Link>
-              <Link
-                href="#services"
-                className="hover:text-maroon transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
-              >
-                {dict.nav.services}
-              </Link>
-            </nav>
 
-            {/* Right actions: Language switcher, Login demo, Mobile menu trigger */}
-            <div className="flex items-center gap-3">
-              {/* Language Selector (Desktop) */}
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-DEFAULT border border-ink/15 bg-white/70 text-xs font-semibold text-ink">
-                <Globe className="size-4 text-teal shrink-0" aria-hidden="true" />
-                <label htmlFor="header-language-select" className="sr-only">
-                  Choose language
-                </label>
-                <select
-                  id="header-language-select"
-                  value={locale}
-                  onChange={(e) => setLocale(e.target.value as SupportedLocale)}
-                  className="bg-transparent border-none text-ink text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-saffron cursor-pointer"
+              {/* Find a Doctor Mega Menu Button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("doctors")}
+                  aria-expanded={activeMenu === "doctors"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "doctors"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
                 >
-                  {supportedLocales.map((loc) => (
-                    <option key={loc.code} value={loc.code}>
-                      {loc.nativeName}
-                    </option>
-                  ))}
-                </select>
+                  <span>Find a Doctor</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "doctors" ? "rotate-180 text-teal" : "text-text-secondary"
+                    }`}
+                  />
+                </button>
+                {activeMenu === "doctors" && (
+                  <div className="absolute left-0 top-full pt-2 z-50">
+                    <FindDoctorMegaMenu
+                      onClose={() => setActiveMenu(null)}
+                      onOpenBooking={() => setIsBookingOpen(true)}
+                    />
+                  </div>
+                )}
               </div>
 
-              {/* Login Button (DEMO) */}
+              {/* Hospitals & Clinics Mega Menu Button (With States Details Menu!) */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("hospitals")}
+                  aria-expanded={activeMenu === "hospitals"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "hospitals"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
+                >
+                  <span>Hospitals & Clinics</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "hospitals" ? "rotate-180 text-teal" : "text-text-secondary"
+                    }`}
+                  />
+                </button>
+                {activeMenu === "hospitals" && (
+                  <div className="absolute left-[-100px] top-full pt-2 z-50">
+                    <HospitalsMegaMenu
+                      onClose={() => setActiveMenu(null)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Specialties Mega Menu Button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("specialties")}
+                  aria-expanded={activeMenu === "specialties"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "specialties"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
+                >
+                  <span>Specialties</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "specialties" ? "rotate-180 text-teal" : "text-text-secondary"
+                    }`}
+                  />
+                </button>
+                {activeMenu === "specialties" && (
+                  <div className="absolute left-[-200px] top-full pt-2 z-50">
+                    <SpecialtiesMegaMenu
+                      onClose={() => setActiveMenu(null)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Patient Services Mega Menu Button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("services")}
+                  aria-expanded={activeMenu === "services"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "services"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
+                >
+                  <span>Patient Services</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "services" ? "rotate-180 text-teal" : "text-text-secondary"
+                    }`}
+                  />
+                </button>
+                {activeMenu === "services" && (
+                  <div className="absolute right-[-100px] top-full pt-2 z-50">
+                    <ServicesMegaMenu
+                      onClose={() => setActiveMenu(null)}
+                      onOpenBooking={() => setIsBookingOpen(true)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* About Us Menu Button */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("about")}
+                  aria-expanded={activeMenu === "about"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "about"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
+                >
+                  <span>About Us</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "about" ? "rotate-180 text-teal" : "text-text-secondary"
+                    }`}
+                  />
+                </button>
+                {activeMenu === "about" && (
+                  <div className="absolute right-0 top-full pt-2 z-50">
+                    <AboutMegaMenu
+                      onClose={() => setActiveMenu(null)}
+                    />
+                  </div>
+                )}
+              </div>
+            </nav>
+
+            {/* Right actions: Login demo, Book Appointment, Mobile menu */}
+            <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3 shrink-0">
+              {/* Sign In (DEMO) */}
               <Button
                 ref={loginTriggerRef}
                 variant="outline"
                 size="sm"
-                className="hidden md:inline-flex"
+                className="hidden xl:inline-flex border-border text-navy hover:bg-bg-secondary"
                 onClick={() => setIsLoginDialogOpen(true)}
-                leftIcon={<Lock className="size-4" />}
+                leftIcon={<Lock className="size-3.5 text-teal" />}
               >
-                {dict.nav.loginDemo}
+                Sign In (Demo)
+              </Button>
+
+              {/* Prominent Book Appointment CTA */}
+              <Button
+                size="sm"
+                className="hidden sm:inline-flex shadow-button bg-teal hover:bg-teal-hover text-white font-bold"
+                onClick={() => setIsBookingOpen(true)}
+                leftIcon={<Calendar className="size-3.5" />}
+              >
+                Book Appointment
               </Button>
 
               {/* Mobile Menu Trigger */}
@@ -146,7 +314,7 @@ export function Header() {
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open mobile navigation menu"
                 aria-expanded={isMobileMenuOpen}
-                className="lg:hidden p-2 text-ink hover:text-maroon hover:bg-black/5 rounded-DEFAULT focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                className="lg:hidden p-2 text-navy hover:bg-bg-secondary rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
               >
                 <Menu className="size-6" />
               </button>
@@ -160,6 +328,7 @@ export function Header() {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         onOpenLogin={() => setIsLoginDialogOpen(true)}
+        onOpenBooking={() => setIsBookingOpen(true)}
         triggerRef={mobileMenuTriggerRef}
       />
 
@@ -168,6 +337,13 @@ export function Header() {
         isOpen={isLoginDialogOpen}
         onClose={() => setIsLoginDialogOpen(false)}
         triggerRef={loginTriggerRef}
+      />
+
+      {/* Global Appointment Booking Dialog */}
+      <AppointmentDialog
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        doctor={doctorsData[0]}
       />
     </>
   );

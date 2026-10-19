@@ -284,5 +284,37 @@ describe("lib/utils unit tests", () => {
       expect(above1000.length).toBeGreaterThan(0);
       expect(above1000.every((d) => d.fee > 1000)).toBe(true);
     });
+
+    it("filters by state and facilityId", () => {
+      const karnatakaDocs = filterDoctors(doctorsData, { state: "Karnataka" });
+      expect(karnatakaDocs.length).toBeGreaterThan(0);
+      expect(karnatakaDocs.every((d) => d.state === "Karnataka" || d.city === "Bengaluru")).toBe(true);
+
+      const facDocs = filterDoctors(doctorsData, { facilityId: "fac-blr-02" });
+      expect(facDocs.length).toBeGreaterThan(0);
+      expect(facDocs.every((d) => d.facilityId === "fac-blr-02")).toBe(true);
+    });
+  });
+
+  describe("state and facility filtering extensions", () => {
+    it("filters facilities by state correctly", () => {
+      const karnatakaFacilities = filterFacilities(facilitiesData, { state: "Karnataka" });
+      expect(karnatakaFacilities.length).toBeGreaterThan(0);
+      expect(karnatakaFacilities.every((f) => f.state === "Karnataka")).toBe(true);
+
+      const maharashtraFacilities = filterFacilities(facilitiesData, { state: "Maharashtra" });
+      expect(maharashtraFacilities.length).toBeGreaterThan(0);
+      expect(maharashtraFacilities.every((f) => f.state === "Maharashtra")).toBe(true);
+    });
+
+    it("filters facilities by facility type correctly", () => {
+      const hospitalsOnly = filterFacilities(facilitiesData, { type: "Hospital" });
+      expect(hospitalsOnly.length).toBeGreaterThan(0);
+      expect(hospitalsOnly.every((f) => f.type === "Hospital")).toBe(true);
+
+      const clinicsOnly = filterFacilities(facilitiesData, { type: "Clinic" });
+      expect(clinicsOnly.length).toBeGreaterThan(0);
+      expect(clinicsOnly.every((f) => f.type === "Clinic")).toBe(true);
+    });
   });
 });
