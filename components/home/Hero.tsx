@@ -1,0 +1,182 @@
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ShieldCheck, Stethoscope, Sparkles, Building2, PhoneCall } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { SmartSearch } from "./SmartSearch";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
+
+interface HeroProps {
+  query: string;
+  onQueryChange: (q: string) => void;
+  selectedCity: string;
+  selectedLocality: string;
+  onCityChange: (c: string) => void;
+  onLocalityChange: (l: string) => void;
+  onSearchSubmit: (e: React.FormEvent) => void;
+}
+
+export function Hero({
+  query,
+  onQueryChange,
+  selectedCity,
+  selectedLocality,
+  onCityChange,
+  onLocalityChange,
+  onSearchSubmit,
+}: HeroProps) {
+  const { dict } = useLanguage();
+
+  return (
+    <section
+      className="relative bg-cream bg-jaali-lattice pt-8 pb-16 sm:pt-14 sm:pb-24 border-b border-ink/10 overflow-hidden"
+      aria-labelledby="hero-main-heading"
+    >
+      <Container>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          {/* Left Column: Heading, Subtext, Search, CTAs (7 cols) */}
+          <div className="lg:col-span-7 flex flex-col space-y-6 sm:space-y-8 z-10">
+            {/* Trust badge */}
+            <div className="inline-flex items-center gap-2">
+              <Badge variant="teal" size="md" icon={<ShieldCheck className="size-4" />}>
+                Verified Healthcare Directory • India (Demo)
+              </Badge>
+            </div>
+
+            {/* Exactly ONE h1 on the page */}
+            <div className="space-y-3">
+              <h1
+                id="hero-main-heading"
+                className="text-[clamp(2.25rem,5vw,3.75rem)] font-extrabold text-maroon tracking-tight leading-[1.15]"
+              >
+                {dict.hero.headline}
+              </h1>
+              <p className="text-lg sm:text-xl text-ink/80 leading-relaxed max-w-xl">
+                {dict.hero.subtext}
+              </p>
+            </div>
+
+            {/* Smart Search Card */}
+            <SmartSearch
+              query={query}
+              onQueryChange={onQueryChange}
+              selectedCity={selectedCity}
+              selectedLocality={selectedLocality}
+              onCityChange={onCityChange}
+              onLocalityChange={onLocalityChange}
+              onSubmit={onSearchSubmit}
+            />
+
+            {/* Hero CTAs: Stack below 640px, side by side from 640px upward */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+              <Link href="#find-doctors" className="w-full sm:w-auto">
+                <Button
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                  leftIcon={<Stethoscope className="size-5" />}
+                >
+                  Explore Doctors
+                </Button>
+              </Link>
+              <Link href="#clinics" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  leftIcon={<Building2 className="size-5" />}
+                >
+                  Browse Facilities
+                </Button>
+              </Link>
+              <a href="tel:+915550192831" className="w-full sm:w-auto">
+                <Button
+                  variant="ghost"
+                  size="md"
+                  fullWidth
+                  leftIcon={<PhoneCall className="size-5 text-teal" />}
+                >
+                  Help Desk (Demo)
+                </Button>
+              </a>
+            </div>
+
+            {/* Micro-guarantee highlights (Content also present in floating cards) */}
+            <div className="flex flex-wrap items-center gap-6 pt-2 text-xs sm:text-sm text-ink/75 font-medium border-t border-ink/10">
+              <span className="flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-teal shrink-0" />
+                Verified Clinical Facilities
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-saffron shrink-0" />
+                Transparent Fees in ₹
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-marigold shrink-0" />
+                Cashless Insurance (Demo)
+              </span>
+            </div>
+          </div>
+
+          {/* Right Column: Hero Photo & Decorative Floating Cards (5 cols) */}
+          <div className="lg:col-span-5 relative flex items-center justify-center">
+            {/* Hero Photo Container: hover zoom under 1.05, overflow-hidden */}
+            <div className="relative w-full max-w-md lg:max-w-none aspect-[4/5] rounded-card shadow-card overflow-hidden border border-ink/15 group">
+              <Image
+                src="/images/hero-doctor.webp"
+                alt="Experienced Indian doctor in clinical consultation with a patient in an outpatient room"
+                fill
+                priority
+                quality={90}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"
+                aria-hidden="true"
+              />
+              <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-medium bg-black/50 backdrop-blur-sm p-2.5 rounded-DEFAULT border border-white/20">
+                Sample outpatient consultation in Bengaluru • Verified facility
+              </div>
+            </div>
+
+            {/* Decorative Floating Cards: Hidden below 1024px strictly */}
+            <div
+              aria-hidden="true"
+              className="hidden lg:block absolute -top-4 -left-6 z-20 bg-white p-3.5 rounded-card shadow-floating border border-ink/10 max-w-[210px] animate-in fade-in duration-300"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="size-8 rounded-full bg-teal/15 text-teal flex items-center justify-center shrink-0">
+                  <ShieldCheck className="size-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-ink">Verified Clinics</div>
+                  <div className="text-[11px] text-ink/70">100% Sample Audited</div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="hidden lg:block absolute -bottom-5 -right-4 z-20 bg-white p-3.5 rounded-card shadow-floating border border-ink/10 max-w-[220px] animate-in fade-in duration-300"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="size-8 rounded-full bg-saffron/20 text-ink flex items-center justify-center shrink-0 font-bold text-xs">
+                  ₹
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-ink">Transparent Fees</div>
+                  <div className="text-[11px] text-ink/70">Direct In-Clinic ₹ Rates</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
