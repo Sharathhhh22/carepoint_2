@@ -10,6 +10,12 @@ interface SpecialtyPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateStaticParams() {
+  return specialitiesData.map((s) => ({
+    slug: s.slug,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: SpecialtyPageProps): Promise<Metadata> {

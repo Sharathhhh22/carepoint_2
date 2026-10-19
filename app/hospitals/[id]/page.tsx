@@ -9,6 +9,12 @@ interface FacilityPageProps {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  return facilitiesData.map((f) => ({
+    id: f.id,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: FacilityPageProps): Promise<Metadata> {
