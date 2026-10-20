@@ -131,3 +131,96 @@ export const diagnosticTestsData: DiagnosticTest[] = [
     preparationNotes: "Overnight fasting of 8-10 hours advised.",
   },
 ];
+
+export interface HealthPackage {
+  id: string;
+  name: string;
+  tagline: string;
+  testCount: number;
+  fee: number;
+  originalFee: number;
+  turnaroundHours: number;
+  fastingRequired: boolean;
+  idealFor: string;
+  popularTests: string[];
+}
+
+export const healthPackagesData: HealthPackage[] = [
+  {
+    id: "pkg-cardio-metabolic",
+    name: "Comprehensive Heart & Metabolic Panel",
+    tagline: "In-depth cardiac, lipid, kidney, and diabetic risk evaluation",
+    testCount: 54,
+    fee: 1499,
+    originalFee: 3200,
+    turnaroundHours: 8,
+    fastingRequired: true,
+    idealFor: "Adults 30+ with family history of BP, heart disease, or sedentary routine",
+    popularTests: [
+      "Lipid Profile (Cholesterol, Triglycerides, HDL/LDL)",
+      "HbA1c & Fasting Blood Sugar",
+      "Kidney Function Test (Creatinine, BUN, Uric Acid)",
+      "Liver Enzymes (SGOT, SGPT, Bilirubin)",
+      "Resting 12-Lead ECG Analysis",
+      "Free Doctor Review (Sample)",
+    ],
+  },
+  {
+    id: "pkg-senior-vital",
+    name: "Senior Citizen Vital Geriatric Checkup",
+    tagline: "Tailored for bone health, metabolic stability, and joint wellness",
+    testCount: 48,
+    fee: 1850,
+    originalFee: 3800,
+    turnaroundHours: 12,
+    fastingRequired: true,
+    idealFor: "Seniors 55+ for proactive monitoring of mobility, vitamins, and organ health",
+    popularTests: [
+      "Vitamin D3 (25-OH) & Vitamin B12",
+      "Bone & Calcium Density Markers",
+      "Complete Renal & Hepatic Screen",
+      "Cardiac Biomarkers & Resting ECG",
+      "Thyroid Stimulating Hormone (TSH)",
+      "Geriatric Consultation & Diet Guidance",
+    ],
+  },
+  {
+    id: "pkg-women-complete",
+    name: "Women's Complete Health & Hormonal Screen",
+    tagline: "Essential hormonal, haematology, bone density, and thyroid assessment",
+    testCount: 42,
+    fee: 1299,
+    originalFee: 2900,
+    turnaroundHours: 8,
+    fastingRequired: false,
+    idealFor: "Women 20+ managing hormonal balance, stress, fatigue, or annual checkups",
+    popularTests: [
+      "Complete Blood Count (CBC) with ESR & Iron Profile",
+      "Complete Thyroid Profile (T3, T4, TSH)",
+      "Serum Ferritin & Vitamin D3",
+      "Fasting Blood Sugar & Insulin Review",
+      "Urine Routine & Microscopic Examination",
+      "Gynaecologist Teleconsultation (Demo)",
+    ],
+  },
+  {
+    id: "pkg-master-fullbody",
+    name: "Master Full Body Preventive Screen",
+    tagline: "High-value foundational health checkup covering 36 critical parameters",
+    testCount: 36,
+    fee: 799,
+    originalFee: 1800,
+    turnaroundHours: 6,
+    fastingRequired: true,
+    idealFor: "Young professionals and students seeking a fast, reliable baseline health score",
+    popularTests: [
+      "Complete Blood Count (18 Parameters)",
+      "Fasting Blood Glucose",
+      "Lipid Profile (Key 5 Markers)",
+      "Liver Function Screening",
+      "Serum Creatinine (Renal Screen)",
+      "Digital Lab Report via Email & SMS",
+    ],
+  },
+];
+

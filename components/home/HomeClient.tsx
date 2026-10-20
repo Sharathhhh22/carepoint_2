@@ -12,6 +12,10 @@ import { FamilyCare } from "./FamilyCare";
 import { FaqAccordion } from "./FaqAccordion";
 import { QuickAccessServices } from "./QuickAccessServices";
 import { HowCarePointWorks } from "./HowCarePointWorks";
+import { TrustMetrics } from "./TrustMetrics";
+import { EmergencyTraumaHub } from "./EmergencyTraumaHub";
+import { HealthPackages } from "./HealthPackages";
+import { PatientStories } from "./PatientStories";
 import { RangoliDivider } from "@/components/ui/RangoliDivider";
 import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
 import { AssistantLauncher } from "@/components/assistant/AssistantLauncher";
@@ -256,8 +260,14 @@ export function HomeClient() {
         onSearchSubmit={handleSearchSubmit}
       />
 
+      {/* Trust & Scale Metrics Bar */}
+      <TrustMetrics />
+
       {/* SECTION: Quick-Access Services Row */}
       <QuickAccessServices onOpenBooking={handleMobileBookDemo} />
+
+      {/* SECTION: 24x7 Emergency, Trauma & Critical Care Response */}
+      <EmergencyTraumaHub />
 
       <RangoliDivider />
 
@@ -298,8 +308,16 @@ export function HomeClient() {
 
       <RangoliDivider />
 
+      {/* SECTION: Preventive Health & Diagnostic Packages */}
+      <HealthPackages />
+
+      <RangoliDivider />
+
       {/* SECTION: How CarePoint Works */}
       <HowCarePointWorks />
+
+      {/* SECTION: Patient Stories & Clinical Outcomes */}
+      <PatientStories />
 
       <RangoliDivider />
 

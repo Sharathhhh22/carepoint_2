@@ -130,10 +130,10 @@ export function Hero({
             </div>
           </div>
 
-          {/* Right Column: Hero Photo & Decorative Floating Cards (5 cols) */}
+          {/* Right Column: Hero Photo with Clinical Trust Badges (5 cols) */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Hero Photo Container: hover zoom under 1.05, overflow-hidden */}
-            <div className="relative w-full max-w-md lg:max-w-none aspect-[4/5] rounded-card shadow-card overflow-hidden border border-ink/15 group">
+            {/* Hero Photo Container */}
+            <div className="relative w-full max-w-md lg:max-w-none aspect-[4/5] rounded-card shadow-card overflow-hidden border border-border group bg-white">
               <Image
                 src="/images/hero-doctor.webp"
                 alt="Experienced Indian doctor in clinical consultation with a patient in an outpatient room"
@@ -141,16 +141,28 @@ export function Hero({
                 priority
                 quality={90}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-                className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
               />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"
-                aria-hidden="true"
-              />
-              <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-medium bg-navy/95 p-2.5 rounded shadow-sm border border-white/10">
-                <p className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-teal shrink-0" />
-                  <span>Sample outpatient consultation in Bengaluru &bull; Verified facility</span>
+
+              {/* Top Accreditation Pill */}
+              <div className="absolute top-3 left-3 bg-white/95 text-navy text-[11px] font-bold px-3 py-1.5 rounded-md shadow-sm border border-border flex items-center gap-1.5">
+                <ShieldCheck className="size-3.5 text-teal" />
+                <span>NABH Accredited Network (Demo)</span>
+              </div>
+
+              {/* Bottom Integrated Clinical Status Card */}
+              <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-medium bg-navy/95 p-3.5 rounded-md shadow-card border border-white/10 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-teal-pale">
+                    <span className="size-2 rounded-full bg-teal shrink-0 animate-pulse" />
+                    <span>Next OPD Slot: Today at 4:30 PM</span>
+                  </p>
+                  <span className="text-[11px] font-bold text-marigold bg-white/10 px-2 py-0.5 rounded">
+                    4.9 ★ (18.4k)
+                  </span>
+                </div>
+                <p className="text-[11px] text-white/80">
+                  Sample outpatient consultation in Bengaluru &bull; 94 Facilities
                 </p>
               </div>
             </div>

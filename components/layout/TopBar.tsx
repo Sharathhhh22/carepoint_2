@@ -12,14 +12,17 @@ export function TopBar() {
     <div className="bg-maroon text-cream text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-white/10 select-none">
       <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-2 sm:gap-4">
         {/* Left: Emergency & Hours */}
-        <div className="flex items-center flex-wrap gap-4">
-          <div className="flex items-center gap-1.5 text-marigold font-semibold">
-            <Phone className="size-3.5 shrink-0" />
-            <span>Emergency: Call 112 (National Emergency Helpline)</span>
-          </div>
+        <div className="flex items-center flex-wrap gap-3 sm:gap-4">
+          <a
+            href="#emergency-hub"
+            className="flex items-center gap-1.5 text-white bg-emergency hover:bg-emergency/90 px-2 py-0.5 rounded font-bold transition-colors"
+          >
+            <span className="size-2 rounded-full bg-white animate-pulse" />
+            <span>24x7 Emergency: 112 / 1066</span>
+          </a>
           <div className="hidden md:flex items-center gap-1.5 text-cream/80">
             <Clock className="size-3.5 shrink-0" />
-            <span>Mon - Sat: 8:00 AM – 8:00 PM IST</span>
+            <span>OPD Consultation: Mon - Sat 8:00 AM – 8:00 PM IST</span>
           </div>
         </div>
 
