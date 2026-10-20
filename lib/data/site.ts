@@ -28,7 +28,7 @@ export const siteConfig: SiteConfig = {
   description:
     "A multi-specialty clinic and hospital discovery directory for India. Transparent consultation fees, verified local facilities, and experienced clinicians.",
   phone: "+91 555 019 2831",
-  email: "hello@example.com",
+  email: "contact@carepoint.in",
   address: {
     street: "Plot 42, 3rd Cross, 100ft Road",
     locality: "Indiranagar",

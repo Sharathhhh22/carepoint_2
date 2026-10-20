@@ -115,17 +115,24 @@ export function MobileMenu({
         className="fixed inset-y-0 right-0 max-w-sm w-full bg-white shadow-floating p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200"
       >
         <div>
-          {/* Header */}
+          {/* Header with Clickable Logo */}
           <div className="flex items-center justify-between pb-5 border-b border-border">
-            <div className="flex items-center gap-2.5">
-              <div className="size-9 rounded-lg bg-teal text-white font-bold flex items-center justify-center text-sm shadow-sm">
+            <Link
+              href="/"
+              onClick={handleLinkClick}
+              className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal rounded"
+              aria-label="CarePoint - Return to Homepage"
+            >
+              <div className="size-9 rounded-lg bg-teal text-white font-bold flex items-center justify-center text-sm shadow-sm group-hover:bg-teal-hover transition-colors">
                 CP
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg text-navy leading-none">CarePoint</span>
+                <span className="font-bold text-lg text-navy leading-none group-hover:text-teal transition-colors">
+                  CarePoint
+                </span>
                 <span className="text-[10px] text-teal font-semibold mt-0.5">Healthcare India</span>
               </div>
-            </div>
+            </Link>
             <button
               onClick={() => {
                 onClose();
@@ -265,6 +272,23 @@ export function MobileMenu({
             </div>
 
             <Link
+              href="/#health-packages"
+              onClick={handleLinkClick}
+              className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
+            >
+              Health Checkup Packages
+            </Link>
+
+            <Link
+              href="/#emergency-hub"
+              onClick={handleLinkClick}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-bold text-emergency hover:bg-emergency/10"
+            >
+              <span className="size-2 rounded-full bg-emergency animate-pulse" />
+              <span>24x7 Emergency Trauma Hub</span>
+            </Link>
+
+            <Link
               href="/#services"
               onClick={handleLinkClick}
               className="px-3 py-2.5 rounded-md text-sm font-semibold text-text-primary hover:bg-bg-secondary hover:text-teal"
@@ -310,6 +334,13 @@ export function MobileMenu({
           >
             <PhoneCall className="size-4 text-teal-pale" />
             <span>24/7 Helpline (+91 555 019 2831)</span>
+          </a>
+
+          <a
+            href="mailto:contact@carepoint.in"
+            className="flex items-center justify-center gap-2 py-2 px-4 text-text-secondary hover:text-teal font-medium text-xs transition-colors"
+          >
+            <span>contact@carepoint.in</span>
           </a>
         </div>
       </div>

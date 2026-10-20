@@ -20,8 +20,8 @@ export function FaqAccordion() {
 
   return (
     <section
-      id="faq"
-      className="py-16 sm:py-24 bg-cream border-t border-ink/10"
+      id="faqs"
+      className="py-16 sm:py-24 bg-cream border-t border-ink/10 scroll-mt-16"
       aria-labelledby="faq-heading"
     >
       <Container className="max-w-4xl">

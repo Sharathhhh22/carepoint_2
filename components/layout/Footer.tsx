@@ -72,7 +72,15 @@ export function Footer() {
             <div className="p-3.5 bg-maroon/50 border border-maroon rounded-DEFAULT text-xs text-cream/90 flex items-start gap-2.5 max-w-sm">
               <ShieldAlert className="size-4 shrink-0 text-marigold mt-0.5" />
               <span>
-                <strong>Emergency Helpline:</strong> Dial 112 for acute medical emergencies.
+                <strong>Emergency Helpline:</strong> Dial{" "}
+                <a href="tel:112" className="text-marigold font-bold hover:underline">
+                  112
+                </a>{" "}
+                or{" "}
+                <a href="tel:1066" className="text-marigold font-bold hover:underline">
+                  1066
+                </a>{" "}
+                for acute medical emergencies.
               </span>
             </div>
           </div>
@@ -105,6 +113,22 @@ export function Footer() {
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
                   Medical Specialties
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#health-packages"
+                  className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
+                >
+                  Health Packages
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#emergency-hub"
+                  className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
+                >
+                  24x7 Emergency Hub
                 </Link>
               </li>
               <li>

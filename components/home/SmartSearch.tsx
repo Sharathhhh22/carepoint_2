@@ -256,7 +256,14 @@ export function SmartSearch({
                   </span>
                 </div>
                 <h3 className="text-base sm:text-lg font-bold text-navy">
-                  National Emergency Dial: <span className="text-emergency">112</span> &bull; Hospital Direct: <span className="text-navy">1066</span>
+                  National Emergency Dial:{" "}
+                  <a href="tel:112" className="text-emergency hover:underline font-extrabold">
+                    112
+                  </a>{" "}
+                  &bull; Hospital Direct:{" "}
+                  <a href="tel:1066" className="text-navy hover:underline font-extrabold">
+                    1066
+                  </a>
                 </h3>
                 <p className="text-xs sm:text-sm text-text-secondary">
                   Round-the-clock emergency casualty desks, ICU resus bays, and rapid ambulance dispatch.
