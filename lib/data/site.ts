@@ -22,8 +22,8 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "CarePoint",
-  wordmark: "CarePoint",
+  name: "CarePoint Clinic",
+  wordmark: "CarePoint Clinic",
   tagline: "Healthcare, closer to home.",
   description:
     "A multi-specialty clinic and hospital discovery directory for India. Transparent consultation fees, verified local facilities, and experienced clinicians.",

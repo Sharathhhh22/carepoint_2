@@ -121,15 +121,20 @@ export function MobileMenu({
               href="/"
               onClick={handleLinkClick}
               className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal rounded"
-              aria-label="CarePoint - Return to Homepage"
+              aria-label="CarePoint Clinic - Return to Homepage"
             >
               <div className="size-9 rounded-lg bg-teal text-white font-bold flex items-center justify-center text-sm shadow-sm group-hover:bg-teal-hover transition-colors">
                 CP
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg text-navy leading-none group-hover:text-teal transition-colors">
-                  CarePoint
-                </span>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-black text-lg text-navy leading-none group-hover:text-teal transition-colors">
+                    CarePoint
+                  </span>
+                  <span className="text-sm font-bold text-teal leading-none">
+                    Clinic
+                  </span>
+                </div>
                 <span className="text-[10px] text-teal font-semibold mt-0.5">Healthcare India</span>
               </div>
             </Link>

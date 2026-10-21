@@ -18,11 +18,19 @@ import {
   FindDoctorMegaMenu,
   HospitalsMegaMenu,
   SpecialtiesMegaMenu,
+  HealthPackagesMegaMenu,
   ServicesMegaMenu,
   AboutMegaMenu,
 } from "./MegaMenus";
 
-type ActiveMenu = "doctors" | "hospitals" | "specialties" | "services" | "about" | null;
+type ActiveMenu =
+  | "doctors"
+  | "hospitals"
+  | "specialties"
+  | "packages"
+  | "services"
+  | "about"
+  | null;
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,6 +44,37 @@ export function Header() {
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
   const loginTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Smooth hover handlers with 120ms debounce to prevent jitter
+  const handleMouseEnter = (menu: ActiveMenu) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setActiveMenu(menu);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 120);
+  };
+
+  const cancelClose = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  };
+
+  const toggleMenu = (menu: ActiveMenu) => {
+    cancelClose();
+    setActiveMenu((prev) => (prev === menu ? null : menu));
+  };
 
   // Close dropdown on click outside or Escape
   useEffect(() => {
@@ -59,10 +98,13 @@ export function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, []);
 
-  // Sticky header with blur after 16px of scroll
+  // Sticky header shadow after 16px of scroll
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 16) {
@@ -76,10 +118,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMenu = (menu: ActiveMenu) => {
-    setActiveMenu((prev) => (prev === menu ? null : menu));
-  };
-
   return (
     <>
       <header
@@ -90,13 +128,17 @@ export function Header() {
         }`}
       >
         <Container>
-          <div className="flex items-center justify-between gap-4" ref={navContainerRef}>
-            {/* Logo mark and wordmark (Narayana Health inspired, distinctive CarePoint branding) */}
+          <div
+            className="flex items-center justify-between gap-4 relative"
+            ref={navContainerRef}
+            onMouseLeave={handleMouseLeave}
+          >
+            {/* Logo mark and CarePoint Clinic wordmark */}
             <Link
               href="/"
               onClick={() => setActiveMenu(null)}
               className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal rounded p-1 shrink-0"
-              aria-label="CarePoint - Return to Homepage"
+              aria-label="CarePoint Clinic - Return to Homepage"
             >
               <div className="size-10 sm:size-11 rounded-lg bg-teal text-white font-bold flex items-center justify-center shadow-sm group-hover:bg-teal-hover transition-colors">
                 <svg
@@ -114,30 +156,39 @@ export function Header() {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-bold tracking-tight text-navy group-hover:text-teal transition-colors">
-                  CarePoint
-                </span>
-                <span className="text-[10px] text-teal font-bold tracking-wider uppercase -mt-1 hidden xl:block">
-                  Verified Hospitals & Doctors
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-navy group-hover:text-teal transition-colors">
+                    CarePoint
+                  </span>
+                  <span className="text-sm sm:text-base font-bold text-teal tracking-normal">
+                    Clinic
+                  </span>
+                </div>
+                <span className="text-[10px] text-teal font-bold tracking-wider uppercase -mt-0.5 hidden xl:block">
+                  Verified Hospitals &amp; Doctors
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation with Mega Menus */}
             <nav
-              className="hidden lg:flex items-center gap-0.5 xl:gap-2 text-xs xl:text-sm font-semibold text-text-primary"
+              className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 text-xs xl:text-sm font-semibold text-text-primary"
               aria-label="Primary Navigation"
             >
               <Link
                 href="/"
                 onClick={() => setActiveMenu(null)}
+                onMouseEnter={() => handleMouseEnter(null)}
                 className="px-2 xl:px-3 py-2 rounded-md hover:text-teal hover:bg-bg-secondary transition-colors"
               >
                 Home
               </Link>
 
               {/* Find a Doctor Mega Menu Button */}
-              <div className="relative">
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("doctors")}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMenu("doctors")}
@@ -152,22 +203,19 @@ export function Header() {
                   <span>Find a Doctor</span>
                   <ChevronDown
                     className={`size-3.5 transition-transform duration-200 ${
-                      activeMenu === "doctors" ? "rotate-180 text-teal" : "text-text-secondary"
+                      activeMenu === "doctors"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
                     }`}
                   />
                 </button>
-                {activeMenu === "doctors" && (
-                  <div className="absolute left-0 top-full pt-2 z-50">
-                    <FindDoctorMegaMenu
-                      onClose={() => setActiveMenu(null)}
-                      onOpenBooking={() => setIsBookingOpen(true)}
-                    />
-                  </div>
-                )}
               </div>
 
-              {/* Hospitals & Clinics Mega Menu Button (With States Details Menu!) */}
-              <div className="relative">
+              {/* Hospitals & Clinics Mega Menu Button (With Indian States details menu) */}
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("hospitals")}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMenu("hospitals")}
@@ -179,24 +227,22 @@ export function Header() {
                       : "hover:text-teal hover:bg-bg-secondary"
                   }`}
                 >
-                  <span>Hospitals & Clinics</span>
+                  <span>Hospitals &amp; Clinics</span>
                   <ChevronDown
                     className={`size-3.5 transition-transform duration-200 ${
-                      activeMenu === "hospitals" ? "rotate-180 text-teal" : "text-text-secondary"
+                      activeMenu === "hospitals"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
                     }`}
                   />
                 </button>
-                {activeMenu === "hospitals" && (
-                  <div className="absolute left-[-100px] top-full pt-2 z-50">
-                    <HospitalsMegaMenu
-                      onClose={() => setActiveMenu(null)}
-                    />
-                  </div>
-                )}
               </div>
 
               {/* Specialties Mega Menu Button */}
-              <div className="relative">
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("specialties")}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMenu("specialties")}
@@ -211,21 +257,46 @@ export function Header() {
                   <span>Specialties</span>
                   <ChevronDown
                     className={`size-3.5 transition-transform duration-200 ${
-                      activeMenu === "specialties" ? "rotate-180 text-teal" : "text-text-secondary"
+                      activeMenu === "specialties"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
                     }`}
                   />
                 </button>
-                {activeMenu === "specialties" && (
-                  <div className="absolute left-[-200px] top-full pt-2 z-50">
-                    <SpecialtiesMegaMenu
-                      onClose={() => setActiveMenu(null)}
-                    />
-                  </div>
-                )}
+              </div>
+
+              {/* Health Packages Mega Menu Button */}
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("packages")}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleMenu("packages")}
+                  aria-expanded={activeMenu === "packages"}
+                  aria-haspopup="true"
+                  className={`px-2 xl:px-3 py-2 rounded-md flex items-center gap-1 transition-colors ${
+                    activeMenu === "packages"
+                      ? "text-teal bg-teal-pale font-bold"
+                      : "hover:text-teal hover:bg-bg-secondary"
+                  }`}
+                >
+                  <span>Health Packages</span>
+                  <ChevronDown
+                    className={`size-3.5 transition-transform duration-200 ${
+                      activeMenu === "packages"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
+                    }`}
+                  />
+                </button>
               </div>
 
               {/* Patient Services Mega Menu Button */}
-              <div className="relative">
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("services")}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMenu("services")}
@@ -240,22 +311,19 @@ export function Header() {
                   <span>Patient Services</span>
                   <ChevronDown
                     className={`size-3.5 transition-transform duration-200 ${
-                      activeMenu === "services" ? "rotate-180 text-teal" : "text-text-secondary"
+                      activeMenu === "services"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
                     }`}
                   />
                 </button>
-                {activeMenu === "services" && (
-                  <div className="absolute right-[-100px] top-full pt-2 z-50">
-                    <ServicesMegaMenu
-                      onClose={() => setActiveMenu(null)}
-                      onOpenBooking={() => setIsBookingOpen(true)}
-                    />
-                  </div>
-                )}
               </div>
 
               {/* About Us Menu Button */}
-              <div className="relative">
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("about")}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMenu("about")}
@@ -270,19 +338,81 @@ export function Header() {
                   <span>About Us</span>
                   <ChevronDown
                     className={`size-3.5 transition-transform duration-200 ${
-                      activeMenu === "about" ? "rotate-180 text-teal" : "text-text-secondary"
+                      activeMenu === "about"
+                        ? "rotate-180 text-teal"
+                        : "text-text-secondary"
                     }`}
                   />
                 </button>
-                {activeMenu === "about" && (
-                  <div className="absolute right-0 top-full pt-2 z-50">
-                    <AboutMegaMenu
-                      onClose={() => setActiveMenu(null)}
-                    />
-                  </div>
-                )}
               </div>
             </nav>
+
+            {/* Centered Mega Menu Overlays Positioned Relative to Header Container */}
+            {activeMenu === "doctors" && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <FindDoctorMegaMenu
+                  onClose={() => setActiveMenu(null)}
+                  onOpenBooking={() => setIsBookingOpen(true)}
+                />
+              </div>
+            )}
+
+            {activeMenu === "hospitals" && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <HospitalsMegaMenu onClose={() => setActiveMenu(null)} />
+              </div>
+            )}
+
+            {activeMenu === "specialties" && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <SpecialtiesMegaMenu onClose={() => setActiveMenu(null)} />
+              </div>
+            )}
+
+            {activeMenu === "packages" && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <HealthPackagesMegaMenu onClose={() => setActiveMenu(null)} />
+              </div>
+            )}
+
+            {activeMenu === "services" && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <ServicesMegaMenu
+                  onClose={() => setActiveMenu(null)}
+                  onOpenBooking={() => setIsBookingOpen(true)}
+                />
+              </div>
+            )}
+
+            {activeMenu === "about" && (
+              <div
+                className="absolute right-0 top-full pt-2 z-50"
+                onMouseEnter={cancelClose}
+                onMouseLeave={handleMouseLeave}
+              >
+                <AboutMegaMenu onClose={() => setActiveMenu(null)} />
+              </div>
+            )}
 
             {/* Right actions: Login demo, Book Appointment, Mobile menu */}
             <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3 shrink-0">

@@ -18,11 +18,11 @@ const hind = Hind({
 });
 
 export const metadata: Metadata = {
-  title: "CarePoint | Multi-Specialty Clinics and Hospitals in India (Demo)",
+  title: "CarePoint Clinic | Multi-Specialty Clinics and Hospitals in India (Demo)",
   description:
     "Discover verified multi-specialty clinics, experienced clinicians, and transparent consultation fees in ₹ across Indian cities. Fictional demonstration portal for RYNX Digital Media.",
   keywords: [
-    "CarePoint",
+    "CarePoint Clinic",
     "clinic discovery India",
     "hospital directory",
     "doctor consultation fee",
@@ -31,12 +31,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "RYNX Digital Media (Category 7 Demo)" }],
   openGraph: {
-    title: "CarePoint | Multi-Specialty Clinics and Hospitals in India (Demo)",
+    title: "CarePoint Clinic | Multi-Specialty Clinics and Hospitals in India (Demo)",
     description:
       "Discover verified clinics, experienced doctors, and transparent consultation fees in ₹ across Bengaluru, Mumbai, and New Delhi.",
     type: "website",
     locale: "en_IN",
-    siteName: "CarePoint Healthcare Demo",
+    siteName: "CarePoint Clinic Healthcare Demo",
   },
   robots: {
     index: true,

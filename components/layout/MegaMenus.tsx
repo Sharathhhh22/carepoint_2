@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { statesData, StateInfo } from "@/lib/data/locations";
 import { specialitiesData } from "@/lib/data/specialities";
+import { healthPackagesData } from "@/lib/data/services";
+import { formatINR } from "@/lib/utils";
 
 interface MegaMenuProps {
   onClose: () => void;
@@ -375,7 +377,75 @@ export function SpecialtiesMegaMenu({ onClose }: SimpleMegaMenuProps) {
 }
 
 /**
- * 4. Mega Menu: Patient Services
+ * 4. Mega Menu: Health Packages
+ */
+export function HealthPackagesMegaMenu({ onClose }: SimpleMegaMenuProps) {
+  return (
+    <div className="w-[840px] max-w-[95vw] bg-white rounded-lg shadow-dropdown border border-border p-6 text-text-primary animate-in fade-in zoom-in-95 duration-150">
+      <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
+        <div>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-navy flex items-center gap-2">
+            <Activity className="size-4 text-teal" />
+            <span>Preventive Health & Diagnostic Packages</span>
+          </h3>
+          <p className="text-xs text-text-secondary mt-0.5">
+            Full body health checkups with certified home sample collection across 12 cities
+          </p>
+        </div>
+        <Link
+          href="/#health-packages"
+          onClick={onClose}
+          className="text-xs font-bold text-teal hover:underline flex items-center gap-1"
+        >
+          <span>View All Checkups</span>
+          <ArrowRight className="size-3.5" />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        {healthPackagesData.map((pkg) => (
+          <Link
+            key={pkg.id}
+            href="/#health-packages"
+            onClick={onClose}
+            className="p-3.5 rounded-lg border border-border hover:border-teal/50 bg-bg-secondary hover:bg-white transition-all flex flex-col justify-between group"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] font-bold text-teal bg-teal-pale px-2 py-0.5 rounded">
+                  {pkg.testCount} Tests Included
+                </span>
+                <span className="text-[11px] text-text-secondary">
+                  {pkg.fastingRequired ? "10h Fasting" : "No Fasting"}
+                </span>
+              </div>
+              <h4 className="text-xs sm:text-sm font-bold text-navy group-hover:text-teal transition-colors">
+                {pkg.name}
+              </h4>
+              <p className="text-[11px] text-text-secondary line-clamp-1 mt-0.5">
+                {pkg.tagline}
+              </p>
+            </div>
+
+            <div className="flex items-baseline justify-between mt-3 pt-2 border-t border-border/60">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-sm font-extrabold text-navy">{formatINR(pkg.fee)}</span>
+                <span className="text-[10px] text-text-secondary line-through">{formatINR(pkg.originalFee)}</span>
+              </div>
+              <span className="text-[11px] font-bold text-teal group-hover:underline flex items-center gap-0.5">
+                <span>Book Checkup</span>
+                <ArrowRight className="size-3" />
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 5. Mega Menu: Patient Services
  */
 export function ServicesMegaMenu({ onClose, onOpenBooking }: MegaMenuProps) {
   return (
