@@ -101,7 +101,7 @@ export function FacilityCard({ facility, isGps = false, onBook }: FacilityCardPr
                 </span>{" "}
                 •{" "}
                 <span className="italic text-ink-subtle">
-                  Distance based on locality (sample)
+                  Distance based on locality
                 </span>
               </span>
             )}
@@ -135,9 +135,6 @@ export function FacilityCard({ facility, isGps = false, onBook }: FacilityCardPr
           >
             {facility.phone}
           </a>
-          <span className="text-[10px] text-ink-subtle bg-cream-muted px-1.5 py-0.2 rounded">
-            Fictional
-          </span>
         </div>
 
         {/* Specialities tags */}

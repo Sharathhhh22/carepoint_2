@@ -38,10 +38,10 @@ export function TrustMetrics() {
       icon: BadgeIndianRupee,
     },
     {
-      stat: "4.9 ★",
-      label: "Patient Trust Index",
-      sublabel: "18,400+ verified consultations",
-      icon: Star,
+      stat: "24x7",
+      label: "Critical Care Response",
+      sublabel: "Emergency & casualty desks",
+      icon: ShieldCheck,
     },
   ];
 

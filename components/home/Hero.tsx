@@ -50,7 +50,7 @@ export function Hero({
             {/* Clinical Section Kicker */}
             <div className="flex items-center gap-2 text-xs font-bold text-teal tracking-wider uppercase">
               <span className="size-2 rounded-full bg-teal" />
-              <span>Verified Healthcare Directory &bull; India (Demo)</span>
+              <span>Verified Healthcare Directory &bull; India</span>
             </div>
 
             {/* Exactly ONE h1 on the page */}
@@ -101,14 +101,14 @@ export function Hero({
                   Browse Facilities
                 </Button>
               </Link>
-              <a href="tel:+915550192831" className="w-full sm:w-auto">
+              <a href="tel:+918049601200" className="w-full sm:w-auto">
                 <Button
                   variant="ghost"
                   size="md"
                   fullWidth
                   leftIcon={<PhoneCall className="size-5 text-teal" />}
                 >
-                  Help Desk (Demo)
+                  Patient Help Desk
                 </Button>
               </a>
             </div>
@@ -125,7 +125,7 @@ export function Hero({
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="size-2 rounded-full bg-marigold shrink-0" />
-                Cashless Insurance (Demo)
+                Cashless Insurance Tie-ups
               </span>
             </div>
           </div>
@@ -147,7 +147,7 @@ export function Hero({
               {/* Top Accreditation Pill */}
               <div className="absolute top-3 left-3 bg-white/95 text-navy text-[11px] font-bold px-3 py-1.5 rounded-md shadow-sm border border-border flex items-center gap-1.5">
                 <ShieldCheck className="size-3.5 text-teal" />
-                <span>NABH Accredited Network (Demo)</span>
+                <span>NABH Accredited Hospital Network</span>
               </div>
 
               {/* Bottom Integrated Clinical Status Card */}
@@ -157,12 +157,12 @@ export function Hero({
                     <span className="size-2 rounded-full bg-teal shrink-0 animate-pulse" />
                     <span>Next OPD Slot: Today at 4:30 PM</span>
                   </p>
-                  <span className="text-[11px] font-bold text-marigold bg-white/10 px-2 py-0.5 rounded">
-                    4.9 ★ (18.4k)
+                  <span className="text-[11px] font-semibold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">
+                    Verified OPD
                   </span>
                 </div>
                 <p className="text-[11px] text-white/80">
-                  Sample outpatient consultation in Bengaluru &bull; 94 Facilities
+                  Outpatient Consultation &bull; Bengaluru &bull; 94 Facilities
                 </p>
               </div>
             </div>

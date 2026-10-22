@@ -16,7 +16,6 @@ import { TrustMetrics } from "./TrustMetrics";
 import { EmergencyTraumaHub } from "./EmergencyTraumaHub";
 import { HealthPackages } from "./HealthPackages";
 import { PatientStories } from "./PatientStories";
-import { RangoliDivider } from "@/components/ui/RangoliDivider";
 import { AppointmentDialog } from "@/components/modals/AppointmentDialog";
 import { AssistantLauncher } from "@/components/assistant/AssistantLauncher";
 import { MobileStickyBar } from "@/components/layout/MobileStickyBar";
@@ -269,15 +268,11 @@ export function HomeClient() {
       {/* SECTION: 24x7 Emergency, Trauma & Critical Care Response */}
       <EmergencyTraumaHub />
 
-      <RangoliDivider />
-
       {/* SECTION 03: Specialities */}
       <Specialities
         onSelectSpeciality={(spec) => setSelectedSpeciality(spec)}
         selectedSpeciality={selectedSpeciality}
       />
-
-      <RangoliDivider />
 
       {/* SECTION 04: Healthcare Discovery (Facilities and Doctors) */}
       <FacilityList
@@ -306,12 +301,8 @@ export function HomeClient() {
         onClearFilters={handleClearFilters}
       />
 
-      <RangoliDivider />
-
       {/* SECTION: Preventive Health & Diagnostic Packages */}
       <HealthPackages />
-
-      <RangoliDivider />
 
       {/* SECTION: How CarePoint Works */}
       <HowCarePointWorks />
@@ -319,14 +310,10 @@ export function HomeClient() {
       {/* SECTION: Patient Stories & Clinical Outcomes */}
       <PatientStories />
 
-      <RangoliDivider />
-
       {/* SECTION 05: Practical Services & Government Schemes */}
       <PracticalServices />
 
       <SchemeCards />
-
-      <RangoliDivider />
 
       {/* SECTION 06: Family Healthcare & FAQ Accordion */}
       <FamilyCare

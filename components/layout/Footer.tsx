@@ -26,7 +26,7 @@ export function Footer() {
 
   const onSubmit = () => {
     showToast(
-      "Subscribed to CarePoint health bulletins (Demo). No real emails will be sent.",
+      "Subscribed to CarePoint health bulletins. You will receive updates on preventive health.",
       "success"
     );
     reset();
@@ -144,7 +144,7 @@ export function Footer() {
                   href="/#schemes"
                   className="hover:text-saffron transition-colors py-1 inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  Cashless Schemes (Demo)
+                  Cashless Insurance Schemes
                 </Link>
               </li>
               <li>
@@ -178,7 +178,7 @@ export function Footer() {
                   href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
                   className="hover:text-saffron transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded"
                 >
-                  {siteConfig.phone} (Sample)
+                  {siteConfig.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -200,7 +200,7 @@ export function Footer() {
           {/* Col 4: Newsletter Form (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-marigold">
-              Health Bulletins (Demo)
+              Health Bulletins
             </h3>
             <p className="text-xs text-cream/70 leading-relaxed">
               Receive monthly preventive wellness advice and local health updates.
@@ -227,7 +227,7 @@ export function Footer() {
                     className="mt-2 w-full text-xs"
                     rightIcon={<ArrowRight className="size-4" />}
                   >
-                    Subscribe (DEMO)
+                    Subscribe
                   </Button>
                 </div>
                 {errors.email && (
@@ -273,7 +273,7 @@ export function Footer() {
               {siteConfig.disclaimer}
             </p>
             <p className="mt-1 text-[11px] text-cream/50">
-              © {currentYear} CarePoint (RYNX Digital Media Category 7 Demonstration). All rights reserved.
+              © {currentYear} CarePoint Clinic. All rights reserved.
             </p>
           </div>
         </div>

@@ -416,7 +416,7 @@ export function Header() {
 
             {/* Right actions: Login demo, Book Appointment, Mobile menu */}
             <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3 shrink-0">
-              {/* Sign In (DEMO) */}
+              {/* Sign In */}
               <Button
                 ref={loginTriggerRef}
                 variant="outline"
@@ -425,7 +425,7 @@ export function Header() {
                 onClick={() => setIsLoginDialogOpen(true)}
                 leftIcon={<Lock className="size-3.5 text-teal" />}
               >
-                Sign In (Demo)
+                Sign In
               </Button>
 
               {/* Prominent Book Appointment CTA */}

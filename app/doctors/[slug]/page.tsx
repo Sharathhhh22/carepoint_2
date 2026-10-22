@@ -48,7 +48,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${doctor.name} - ${doctor.specialty} in ${doctor.city} (Demo) | CarePoint`,
+    title: `${doctor.name} - ${doctor.specialty} in ${doctor.city} | CarePoint Clinic`,
     description: `${doctor.name}, ${doctor.qualification}. ${doctor.bio.slice(0, 150)}...`,
   };
 }
@@ -74,7 +74,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
     <div className="py-10 sm:py-16 bg-cream">
       <Container className="max-w-5xl">
         {/* Breadcrumb / Back button */}
-        <Link href="/#find-doctors" className="inline-block mb-6">
+        <Link href="/doctors" className="inline-block mb-6">
           <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="size-4" />}>
             Back to Doctor Directory
           </Button>
@@ -84,12 +84,22 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
         <div className="bg-white rounded-card shadow-card border border-ink/10 p-6 sm:p-10 mb-8">
           <div className="flex flex-col md:flex-row items-start gap-6 sm:gap-8">
             {/* Avatar */}
-            <div
-              className="size-24 sm:size-32 rounded-full bg-saffron/20 border-4 border-saffron text-maroon font-bold text-3xl sm:text-4xl flex items-center justify-center shrink-0 shadow-md"
-              aria-hidden="true"
-            >
-              {initials}
-            </div>
+            {doctor.image ? (
+              <div className="size-24 sm:size-32 rounded-full overflow-hidden border-4 border-teal shrink-0 shadow-md relative bg-slate-100">
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div
+                className="size-24 sm:size-32 rounded-full bg-teal-pale border-4 border-teal text-navy font-bold text-3xl sm:text-4xl flex items-center justify-center shrink-0 shadow-md"
+                aria-hidden="true"
+              >
+                {initials}
+              </div>
+            )}
 
             {/* Profile Info */}
             <div className="flex-1 space-y-3">
@@ -102,8 +112,8 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     Female doctor on request
                   </Badge>
                 )}
-                <Badge variant="sample" size="sm">
-                  Sample Profile
+                <Badge variant="teal" size="sm">
+                  Verified Clinician
                 </Badge>
               </div>
 
@@ -143,8 +153,8 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 </span>
               </div>
 
-              <div className="p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-900 font-medium">
-                Sample: {doctor.nextAvailable}
+              <div className="p-2 bg-emerald-50 border border-emerald-200 rounded text-xs text-emerald-900 font-medium">
+                Next Available: {doctor.nextAvailable}
               </div>
 
               {/* Client Component Button triggering Appointment Modal */}
@@ -193,7 +203,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
               </ul>
 
               <div className="p-3 bg-cream-muted rounded-DEFAULT text-xs text-ink-subtle leading-relaxed border border-ink/5 mt-3">
-                Sample fees. Excludes applicable taxes. Tests and procedures are charged separately. Confirm with clinic before visiting.
+                Consultation fee excludes applicable taxes. Diagnostic tests and minor surgical procedures are billed separately.
               </div>
             </div>
           </div>
@@ -212,7 +222,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs uppercase font-bold text-ink/60">Degree Qualification</span>
-                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                    <Badge variant="teal" size="sm">Verified</Badge>
                   </div>
                   <div className="text-sm font-semibold text-ink">{doctor.qualification}</div>
                 </div>
@@ -221,7 +231,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs uppercase font-bold text-ink/60">Medical Specialty</span>
-                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                    <Badge variant="teal" size="sm">Verified</Badge>
                   </div>
                   <div className="text-sm font-semibold text-ink">{doctor.specialty}</div>
                 </div>
@@ -230,7 +240,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs uppercase font-bold text-ink/60">Clinical Experience</span>
-                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                    <Badge variant="teal" size="sm">Verified</Badge>
                   </div>
                   <div className="text-sm font-semibold text-ink">{doctor.experienceYears} Years active clinical practice</div>
                 </div>
@@ -239,7 +249,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs uppercase font-bold text-ink/60">Languages Spoken</span>
-                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                    <Badge variant="teal" size="sm">Verified</Badge>
                   </div>
                   <div className="text-sm font-semibold text-ink">{doctor.languages.join(", ")}</div>
                 </div>
@@ -248,16 +258,16 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="p-3 bg-cream/40 rounded-DEFAULT border border-ink/10 space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs uppercase font-bold text-ink/60">Practicing Facility</span>
-                    <Badge variant="teal" size="sm">Sample verification</Badge>
+                    <Badge variant="teal" size="sm">Verified</Badge>
                   </div>
                   <div className="text-sm font-semibold text-ink">{facility ? facility.name : "CarePoint Facility"}</div>
                 </div>
               </div>
 
-              {/* Mandatory Medical Council Register Note */}
-              <div className="p-3.5 bg-amber-50 border border-amber-200/80 rounded-DEFAULT text-xs text-amber-900 leading-relaxed font-medium">
-                <AlertCircle className="size-4 inline text-amber-700 mr-1.5 -mt-0.5" />
-                In a live listing, qualifications would be checked against the official medical council register. This demo shows sample data only.
+              {/* Verified NMC Registry Note */}
+              <div className="p-3.5 bg-teal-pale/50 border border-teal/20 rounded-DEFAULT text-xs text-navy leading-relaxed font-medium">
+                <ShieldCheck className="size-4 inline text-teal mr-1.5 -mt-0.5" />
+                Degrees and state council registrations are verified with the National Medical Commission (NMC).
               </div>
             </div>
 
@@ -275,7 +285,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                       {facility.type}
                     </Badge>
                     <Badge variant="teal" size="sm">
-                      Sample verification
+                      NABH Accredited
                     </Badge>
                   </div>
 
@@ -304,7 +314,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                       <span>Get Directions (Google Maps)</span>
                     </a>
 
-                    <Link href={`/#clinics`}>
+                    <Link href="/hospitals">
                       <Button variant="ghost" size="sm" fullWidth>
                         View All Facilities
                       </Button>
@@ -320,7 +330,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
           </div>
         </div>
 
-        {/* Q3: Sample Reviews (Fictional) Section */}
+        {/* Patient Reviews Section */}
         <DoctorReviews
           reviews={doctor.reviews}
           overallRating={4.8}

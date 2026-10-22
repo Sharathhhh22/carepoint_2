@@ -330,22 +330,22 @@ export function MobileMenu({
             }}
             leftIcon={<Lock className="size-4 text-teal" />}
           >
-            Sign In (DEMO)
+            Sign In
           </Button>
 
           <a
-            href="tel:+915550192831"
+            href="tel:+918049601200"
             className="flex items-center justify-center gap-2 py-2.5 px-4 bg-navy text-white rounded-md font-semibold text-xs hover:bg-navy/90 transition-colors"
           >
             <PhoneCall className="size-4 text-teal-pale" />
-            <span>24/7 Helpline (+91 555 019 2831)</span>
+            <span>24/7 Helpline (+91 80 4960 1200)</span>
           </a>
 
           <a
-            href="mailto:contact@carepoint.in"
+            href="mailto:care@carepoint.in"
             className="flex items-center justify-center gap-2 py-2 px-4 text-text-secondary hover:text-teal font-medium text-xs transition-colors"
           >
-            <span>contact@carepoint.in</span>
+            <span>care@carepoint.in</span>
           </a>
         </div>
       </div>

@@ -30,13 +30,23 @@ export function DoctorCard({ doctor, onBook }: DoctorCardProps) {
     <Card hoverable className="border border-ink/10">
       <CardHeader>
         <div className="flex items-start gap-3.5">
-          {/* Initials Avatar */}
-          <div
-            className="size-14 sm:size-16 rounded-full bg-saffron/20 border-2 border-saffron text-maroon font-bold text-lg sm:text-xl flex items-center justify-center shrink-0 shadow-sm"
-            aria-hidden="true"
-          >
-            {initials}
-          </div>
+          {/* Avatar (Photo with Fallback to Initials) */}
+          {doctor.image ? (
+            <div className="size-14 sm:size-16 rounded-full overflow-hidden border-2 border-teal shrink-0 shadow-sm relative bg-slate-100">
+              <img
+                src={doctor.image}
+                alt={doctor.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div
+              className="size-14 sm:size-16 rounded-full bg-teal-pale border-2 border-teal text-navy font-bold text-lg sm:text-xl flex items-center justify-center shrink-0 shadow-sm"
+              aria-hidden="true"
+            >
+              {initials}
+            </div>
+          )}
 
           <div className="space-y-1 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -80,11 +90,11 @@ export function DoctorCard({ doctor, onBook }: DoctorCardProps) {
           </div>
         </div>
 
-        {/* Sample Availability Notice */}
-        <div className="p-2.5 bg-amber-50 border border-amber-200/80 rounded-DEFAULT text-xs text-amber-900 flex items-center gap-2">
-          <Clock className="size-3.5 text-amber-700 shrink-0" />
+        {/* Availability Notice */}
+        <div className="p-2.5 bg-emerald-50 border border-emerald-200/80 rounded-DEFAULT text-xs text-emerald-900 flex items-center gap-2">
+          <Clock className="size-3.5 text-emerald-700 shrink-0" />
           <span className="font-medium truncate">
-            Sample availability: {doctor.nextAvailable}
+            Next Available Slot: {doctor.nextAvailable}
           </span>
         </div>
       </CardContent>

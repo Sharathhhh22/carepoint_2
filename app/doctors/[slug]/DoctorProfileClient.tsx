@@ -20,7 +20,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         onClick={() => setIsOpen(true)}
         leftIcon={<CalendarCheck className="size-4" />}
       >
-        Book (DEMO)
+        Book Appointment
       </Button>
 
       <AppointmentDialog

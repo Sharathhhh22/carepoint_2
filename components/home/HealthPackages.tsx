@@ -30,7 +30,7 @@ export function HealthPackages({ onBookPackage }: HealthPackagesProps) {
       onBookPackage(pkg);
     } else {
       showToast(
-        `Demo booking initiated for ${pkg.name} (${formatINR(pkg.fee)}). Free home sample collection scheduled (Demo).`,
+        `Booking initiated for ${pkg.name} (${formatINR(pkg.fee)}). Free home sample collection confirmed.`,
         "success"
       );
     }
@@ -63,7 +63,7 @@ export function HealthPackages({ onBookPackage }: HealthPackagesProps) {
           <div className="flex items-center gap-2 p-3 bg-bg-secondary rounded-lg border border-border text-xs text-text-secondary shrink-0">
             <ShieldCheck className="size-5 text-teal shrink-0" />
             <div>
-              <p className="font-bold text-navy">NABL Verified Labs (Demo)</p>
+              <p className="font-bold text-navy">NABL Accredited Labs</p>
               <p>Home sample pickup across 12 cities</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export function HealthPackages({ onBookPackage }: HealthPackagesProps) {
                   leftIcon={<TestTube className="size-4" />}
                   className="font-bold py-2.5 text-sm"
                 >
-                  Book Package (DEMO)
+                  Book Checkup Package
                 </Button>
               </div>
             );

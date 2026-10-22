@@ -40,7 +40,7 @@ export function QuickAccessServices({ onOpenBooking }: QuickAccessServicesProps)
       desc: "Instant scheduling with pre-selected slots and immediate confirmation.",
       href: "#",
       icon: Calendar,
-      action: "Book Now (DEMO)",
+      action: "Book Now",
       isModal: true,
     },
   ];

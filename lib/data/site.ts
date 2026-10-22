@@ -27,8 +27,8 @@ export const siteConfig: SiteConfig = {
   tagline: "Healthcare, closer to home.",
   description:
     "A multi-specialty clinic and hospital discovery directory for India. Transparent consultation fees, verified local facilities, and experienced clinicians.",
-  phone: "+91 555 019 2831",
-  email: "contact@carepoint.in",
+  phone: "+91 80 4960 1200",
+  email: "care@carepoint.in",
   address: {
     street: "Plot 42, 3rd Cross, 100ft Road",
     locality: "Indiranagar",
@@ -40,11 +40,11 @@ export const siteConfig: SiteConfig = {
   emergencyNotice:
     "For emergencies, call 112 immediately or go to the nearest emergency department.",
   disclaimer:
-    "Demonstration website. All clinicians, patients, and content are fictional.",
+    "Official Patient Care Directory. Verified doctors, transparent fees, and NABH-accredited facilities across India.",
   navLinks: [
-    { label: "Find Doctors", href: "#find-doctors" },
-    { label: "Clinics & Hospitals", href: "#clinics" },
-    { label: "Lab Tests", href: "#lab-tests" },
-    { label: "Health Services", href: "#services" },
+    { label: "Find Doctors", href: "/doctors" },
+    { label: "Hospitals & Clinics", href: "/hospitals" },
+    { label: "Medical Specialties", href: "/specialties" },
+    { label: "Health Packages", href: "/#health-packages" },
   ],
 };

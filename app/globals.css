@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  /* Phase 2: CarePoint Healthcare Design System (Narayana Health Inspired) */
+  /* Phase 2: CarePoint Healthcare Design System */
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F3F7F8;
+  --bg-secondary: #F8FAFC;
   --teal-primary: #087E8B;
   --navy-headings: #123047;
   --teal-pale: #E7F4F3;
   --text-primary: #243746;
   --text-secondary: #647480;
-  --border-color: #DDE5E9;
+  --border-color: #E2E8F0;
   --success: #18794E;
   --warning: #A15C00;
   --error: #B42318;
@@ -29,9 +29,9 @@
   --radius-sm: 0.5rem; /* 8px for controls */
   --radius-lg: 1rem;
 
-  --shadow-card: 0 4px 20px -2px rgba(18, 48, 71, 0.06), 0 2px 6px -1px rgba(18, 48, 71, 0.04);
-  --shadow-button: 0 4px 14px 0 rgba(8, 126, 139, 0.28);
-  --shadow-dropdown: 0 16px 36px -4px rgba(18, 48, 71, 0.12);
+  --shadow-card: 0 1px 3px 0 rgba(18, 48, 71, 0.06), 0 1px 2px -1px rgba(18, 48, 71, 0.04);
+  --shadow-button: 0 2px 8px 0 rgba(8, 126, 139, 0.22);
+  --shadow-dropdown: 0 12px 28px -4px rgba(18, 48, 71, 0.12);
 
   --background: var(--bg-primary);
   --foreground: var(--text-primary);
@@ -88,9 +88,10 @@
   }
 }
 
-/* Indian Visual Language: Jaali lattice background (strictly under 8% opacity) */
+/* Restrained subtle background for hero - clean medical styling */
 .bg-jaali-lattice {
-  background-image: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236B1E2E' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M24 0l12 12-12 12L12 12 24 0zm0 24l12 12-12 12-12-12 12-12zm-24 0l12 12-12 12L0 36l0-12zm48 0l0 12-12 12 0-12 12-12zM0 0l12 12L0 24 0 0zm48 0v24l-12-12 12-12z'/%3E%3Ccircle cx='24' cy='24' r='4'/%3E%3Ccircle cx='0' cy='24' r='4'/%3E%3Ccircle cx='48' cy='24' r='4'/%3E%3Ccircle cx='24' cy='0' r='4'/%3E%3Ccircle cx='24' cy='48' r='4'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: none;
+  background-color: var(--bg-secondary);
 }
 
 /* Indian Visual Language: Marigold decorative strip under section eyebrows */

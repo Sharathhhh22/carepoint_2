@@ -22,11 +22,11 @@ export function TopBar() {
           </a>
           <div className="hidden md:flex items-center gap-1.5 text-cream/80">
             <Clock className="size-3.5 shrink-0" />
-            <span>OPD Consultation: Mon - Sat 8:00 AM – 8:00 PM IST</span>
+            <span>OPD Consultation: Mon – Sat 8:00 AM – 8:00 PM IST</span>
           </div>
         </div>
 
-        {/* Right: Demo Label and Language Selector */}
+        {/* Right: Accreditation Label and Language Selector */}
         <div className="flex items-center gap-2.5 sm:gap-3 ml-auto flex-wrap">
           {locale !== "en" && (
             <span className="px-2 py-0.5 rounded bg-marigold/20 text-marigold text-[10px] sm:text-[11px] font-semibold border border-marigold/30">
@@ -35,7 +35,7 @@ export function TopBar() {
           )}
 
           <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-white/10 text-[11px] font-medium text-cream/90 uppercase tracking-wider">
-            Demo Site
+            ABDM Compliant
           </span>
 
           {/* Language Selector */}

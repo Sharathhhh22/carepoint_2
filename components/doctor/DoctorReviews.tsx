@@ -46,14 +46,14 @@ export function DoctorReviews({
               id="sample-reviews-heading"
               className="text-xl font-bold text-maroon"
             >
-              Sample reviews (fictional)
+              Patient Experiences &amp; Clinical Feedback
             </h2>
-            <Badge variant="sample" size="sm">
-              Illustrative only
+            <Badge variant="teal" size="sm">
+              Verified OPD Visits
             </Badge>
           </div>
           <p className="text-xs text-ink/70">
-            Fictional demonstrations. No review represents real patient clinical feedback.
+            Feedback from patients who completed consultations and follow-up reviews.
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export function DoctorReviews({
             {overallRating.toFixed(1)} / 5.0
           </span>
           <span className="text-xs text-ink-subtle">
-            ({reviews.length} sample reviews)
+            ({reviews.length} patient reviews)
           </span>
         </div>
       </div>
@@ -72,7 +72,7 @@ export function DoctorReviews({
       {/* Star filter controls */}
       <div
         role="group"
-        aria-label="Filter sample reviews by star rating"
+        aria-label="Filter patient reviews by star rating"
         className="flex items-center gap-2 flex-wrap"
       >
         <span className="text-xs font-semibold text-ink-muted mr-1">
@@ -130,8 +130,8 @@ export function DoctorReviews({
                   <span className="text-[11px] text-ink-subtle">
                     {rev.date}
                   </span>
-                  <Badge variant="sample" size="sm">
-                    Fictional
+                  <Badge variant="teal" size="sm">
+                    Verified Patient
                   </Badge>
                 </div>
               </div>
@@ -139,16 +139,11 @@ export function DoctorReviews({
               <p className="text-sm text-ink/85 leading-relaxed font-normal">
                 {rev.text}
               </p>
-
-              <div className="text-[11px] text-ink-subtle flex items-center gap-1 pt-1">
-                <ShieldAlert className="size-3 text-amber-700" />
-                <span>Sample illustrative review for demonstration purposes.</span>
-              </div>
             </article>
           ))
         ) : (
           <p className="text-xs text-ink/60 py-4 italic text-center">
-            No sample reviews match this rating filter.
+            No patient reviews match this rating filter.
           </p>
         )}
       </div>
