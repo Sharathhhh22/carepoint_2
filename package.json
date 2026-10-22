@@ -1,9 +1,0 @@
-{
-  "name": "care-medinova",
-  "version": "1.0.0",
-  "description": "Care Medinova - Hospital & Healthcare Website",
-  "private": true,
-  "scripts": {
-    "build": "echo 'Care Medinova static site ready'"
-  }
-}
