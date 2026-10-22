@@ -97,8 +97,15 @@
 }
 
 .hero-header {
-    background: url(../img/hero.jpg) top right no-repeat;
+    background: linear-gradient(to right, rgba(29, 42, 77, 0.82) 0%, rgba(29, 42, 77, 0.62) 42%, rgba(29, 42, 77, 0.12) 68%, rgba(29, 42, 77, 0) 85%), url(../img/hero.jpg) top right no-repeat;
     background-size: cover;
+}
+
+@media (max-width: 991.98px) {
+    .hero-header {
+        background: linear-gradient(rgba(29, 42, 77, 0.75), rgba(29, 42, 77, 0.75)), url(../img/hero.jpg) center center no-repeat;
+        background-size: cover;
+    }
 }
 
 .service-item {
